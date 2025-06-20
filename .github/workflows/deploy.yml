@@ -26,7 +26,7 @@ jobs:
           BRANCH=$(echo "${GITHUB_REF##*/}")
           if [ "$BRANCH" = "dev" ]; then
             ssh ${{ secrets.SERVER_USER }}@${{ secrets.AWS_HOST_IP }} << 'EOF'
-              cd /var/www/staging
+              cd /var/www/newstaging.eboxtenders.com
               git pull origin dev
               npm install
               npm run build
@@ -35,7 +35,7 @@ jobs:
             EOF
           elif [ "$BRANCH" = "master" ]; then
             ssh ${{ secrets.SERVER_USER }}@${{ secrets.AWS_HOST_IP }} << 'EOF'
-              cd /var/www/prod
+              cd /var/www/production.eboxtenders.com
               git pull origin master
               npm install
               npm run build
