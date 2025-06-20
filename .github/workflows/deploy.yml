@@ -1,10 +1,10 @@
-name: Deploy to AWS
+name: Deploy to EC2
 
 on:
   push:
     branches:
-      - dev
       - master
+      - dev
 
 jobs:
   deploy:
@@ -12,34 +12,78 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.AWS_HOST_IP }} >> ~/.ssh/known_hosts
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "npm"
 
-      - name: Deploy to AWS server
+      - name: Install Dependencies (CI only)
+        run: npm ci
+
+      - name: Run Linting
+        run: npm run lint
+
+      - name: Build Application (CI only)
+        run: npm run build
+
+      - name: Validate SSH Secrets
         run: |
-          BRANCH=$(echo "${GITHUB_REF##*/}")
-          if [ "$BRANCH" = "dev" ]; then
-            ssh ${{ secrets.SERVER_USER }}@${{ secrets.AWS_HOST_IP }} << EOF
-              cd /var/www/newstaging.eboxtenders.com
-              git pull origin dev
-              npm install
-              npm run build
-              npm run start &
-              echo "✅ Deployed to STAGING"
-            EOF
-          elif [ "$BRANCH" = "master" ]; then
-            ssh ${{ secrets.SERVER_USER }}@${{ secrets.AWS_HOST_IP }} << EOF
-              cd /var/www/production.eboxtenders.com
-              git pull origin master
-              npm install
-              npm run build
-              npm run start &
-              echo "✅ Deployed to PRODUCTION"
-            EOF
+          if [ -z "${{ secrets.AWS_HOST_IP }}" ]; then
+            echo "::error::AWS_HOST_IP secret is not set"
+            exit 1
           fi
+          if [ -z "${{ secrets.SERVER_USER }}" ]; then
+            echo "::error::SERVER_USER secret is not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.SERVER_SSH_KEY }}" ]; then
+            echo "::error::SERVER_SSH_KEY secret is not set"
+            exit 1
+          fi
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_HOST_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            BRANCH="${GITHUB_REF##*/}"
+
+            if [ "$BRANCH" = "dev" ]; then
+              APP_DIR="/var/www/newstaging.eboxtenders.com"
+              APP_NAME="eboxtenders-staging"
+            elif [ "$BRANCH" = "master" ]; then
+              APP_DIR="/var/www/production.eboxtenders.com"
+              APP_NAME="eboxtenders-prod"
+            else
+              echo "🚫 Unsupported branch: $BRANCH"
+              exit 1
+            fi
+
+            echo "🔐 Setting permissions for $APP_DIR"
+            sudo git config --global --add safe.directory "$APP_DIR"
+            sudo chown -R ${{ secrets.SERVER_USER }}:${{ secrets.SERVER_USER }} "$APP_DIR"
+
+            echo "📦 Pulling latest code from $BRANCH"
+            cd "$APP_DIR"
+            git pull origin "$BRANCH"
+
+            echo "🧹 Cleaning previous builds and caches"
+            rm -rf node_modules .next .cache
+
+            echo "📥 Installing dependencies"
+            npm ci
+
+            echo "🔨 Building the application"
+            npm run build
+
+            echo "🚀 Restarting application with PM2 as $APP_NAME"
+            pm2 delete "$APP_NAME" || true
+            pm2 start npm --name "$APP_NAME" -- run start
+            pm2 save
+
+            echo "✅ Deployment completed for $BRANCH → $APP_NAME"
