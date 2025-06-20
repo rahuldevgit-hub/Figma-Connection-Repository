@@ -36,23 +36,25 @@ const LoginScreen = () => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = async (data: LoginFormData) => {
+const onSubmit = async (data: LoginFormData) => {
     setLoading(true);
     try {
-      const response = await AdminLogin(data);
+const response = await AdminLogin(data as { email: string; password: string });
+
       if (response.status === true) {
         setToken('admin_token', response.access_token);
         toast.success('Login successful!');
         router.push('/admin/dashboard');
       } else {
-        toast.error('Login failed! Check your credentials.');
+        toast.error(response.message || 'Login failed! Check credentials.');
       }
     } catch (error: any) {
-      toast.error('Login failed! Try again.');
+      toast.error(error?.response?.data?.message || 'Login failed! Try again.');
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">

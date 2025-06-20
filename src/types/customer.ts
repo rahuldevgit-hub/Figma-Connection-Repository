@@ -1,10 +1,15 @@
 export interface Customer {
   id: number;
-  name: string;
+ name: string;
   email: string;
   mobile: string;
-  balance: string;
-  created: string;
-  recharge: string;
+  country: string;
+  state: string;
+  city: string;
+  dob: string;
+  gender: string;
+  landmark: string;
+  address: string;
+  categories: string;
   status: 'Active' | 'Inactive';
 }

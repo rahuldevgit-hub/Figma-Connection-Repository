@@ -1,0 +1,11 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/favicon.ico/route": "/favicon.ico",
+  "/administrator/page": "/administrator",
+  "/page": "/",
+  "/admin/customers/add/page": "/admin/customers/add",
+  "/admin/customers/edit/page": "/admin/customers/edit",
+  "/admin/page": "/admin",
+  "/admin/dashboard/page": "/admin/dashboard",
+  "/admin/customers/page": "/admin/customers"
+}

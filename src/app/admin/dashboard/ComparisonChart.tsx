@@ -1,5 +1,4 @@
 import React from 'react';
-import { Progress } from '../components/ui/progress';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 const monthlyData = [{
   label: 'Total Revenue',

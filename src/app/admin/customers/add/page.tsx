@@ -13,7 +13,7 @@ import Input from '@/components/ui/Input';
 
 // Define Zod schema for customer form validation
 
-export const customerSchema = z.object({
+const customerSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email"),
   mobile: z.string().min(10, "Mobile must be 10 digits").max(10),
@@ -60,7 +60,7 @@ const countries = [
 export default function AddCustomerForm() {
   const navigate = useRouter();
   const [profileImage, setProfileImage] = useState<File | null>(null);
- // Set minimum and maximum date of birth limits
+  // Set minimum and maximum date of birth limits
   const today = new Date();
   const minDOB = new Date(today.getFullYear() - 75, today.getMonth(), today.getDate());
   const maxDOB = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
@@ -82,10 +82,10 @@ export default function AddCustomerForm() {
     },
   });
 
-// Form submission handler and customer create logic
+  // Form submission handler and customer create logic
   const onSubmit = async (data: FormData) => {
     try {
-       // Create form data for multipart request
+      // Create form data for multipart request
       const formDataToSend = new FormData();
       formDataToSend.append('name', data.name);
       formDataToSend.append('email', data.email);
@@ -97,7 +97,7 @@ export default function AddCustomerForm() {
       formDataToSend.append('landmark', data.landmark || '');
       formDataToSend.append('dob', data.dateOfBirth || '');
       formDataToSend.append('gender', data.gender || '');
-      formDataToSend.append('status', data.status || 'active'); // Default to 'active' if needed
+      formDataToSend.append('status', 'active');
       formDataToSend.append('categories', JSON.stringify(data.categories || []));
 
       if (profileImage) {
@@ -230,7 +230,7 @@ export default function AddCustomerForm() {
 
           {/* Categories */}
           <div>
-            <Label>Categories <span className="text-red-600">*</span></Label>
+              <Label htmlFor="address">Categories <span className="text-red-600">*</span></Label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {categories.map((cat) => (
                 <label key={cat} className="flex items-center">
