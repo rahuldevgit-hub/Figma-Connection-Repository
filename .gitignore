@@ -1,0 +1,29 @@
+node_modules
+
+#.env
+.env
+
+# .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# build output
+.next/
+
+# test results
+test-results/
+
+# SWC cache
+.swc/
+
+# lock files
+package-lock.json
+yarn.lock
+
+# misc
+*.log
+
+*storybook.log
+storybook-static
