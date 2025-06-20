@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  nextjs-app:
+    container_name: nextjs-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "3001:3001"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
