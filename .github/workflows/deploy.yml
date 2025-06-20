@@ -25,7 +25,7 @@ jobs:
         run: |
           BRANCH=$(echo "${GITHUB_REF##*/}")
           if [ "$BRANCH" = "dev" ]; then
-            ssh ${{ secrets.SERVER_USER }}@${{ secrets.AWS_HOST_IP }} << 'EOF'
+            ssh ${{ secrets.SERVER_USER }}@${{ secrets.AWS_HOST_IP }} << EOF
               cd /var/www/newstaging.eboxtenders.com
               git pull origin dev
               npm install
@@ -34,7 +34,7 @@ jobs:
               echo "✅ Deployed to STAGING"
             EOF
           elif [ "$BRANCH" = "master" ]; then
-            ssh ${{ secrets.SERVER_USER }}@${{ secrets.AWS_HOST_IP }} << 'EOF'
+            ssh ${{ secrets.SERVER_USER }}@${{ secrets.AWS_HOST_IP }} << EOF
               cd /var/www/production.eboxtenders.com
               git pull origin master
               npm install
