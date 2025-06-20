@@ -26,20 +26,20 @@ jobs:
           BRANCH=$(echo "${GITHUB_REF##*/}")
           if [ "$BRANCH" = "dev" ]; then
             ssh ${{ secrets.SERVER_USER }}@${{ secrets.AWS_HOST_IP }} << 'EOF'
-              cd /var/www/staging
-              git pull origin dev
-              npm install
-              npm run build
-              npm run start &
-              echo "✅ Deployed to STAGING"
-            EOF
+cd /var/www/staging
+git pull origin dev
+npm install
+npm run build
+npm run start &
+echo "✅ Deployed to STAGING"
+EOF
           elif [ "$BRANCH" = "master" ]; then
             ssh ${{ secrets.SERVER_USER }}@${{ secrets.AWS_HOST_IP }} << 'EOF'
-              cd /var/www/prod
-              git pull origin master
-              npm install
-              npm run build
-              npm run start &
-              echo "✅ Deployed to PRODUCTION"
-            EOF
+cd /var/www/prod
+git pull origin master
+npm install
+npm run build
+npm run start &
+echo "✅ Deployed to PRODUCTION"
+EOF
           fi
