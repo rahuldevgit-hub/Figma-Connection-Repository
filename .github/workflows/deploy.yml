@@ -1,0 +1,45 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - dev
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.AWS_HOST_IP }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to AWS server
+        run: |
+          BRANCH=$(echo "${GITHUB_REF##*/}")
+          if [ "$BRANCH" = "dev" ]; then
+            ssh ${{ secrets.SERVER_USER }}@${{ secrets.AWS_HOST_IP }} << 'EOF'
+              cd /var/www/staging
+              git pull origin dev
+              npm install
+              npm run build
+              npm run start &
+              echo "✅ Deployed to STAGING"
+            EOF
+          elif [ "$BRANCH" = "master" ]; then
+            ssh ${{ secrets.SERVER_USER }}@${{ secrets.AWS_HOST_IP }} << 'EOF'
+              cd /var/www/prod
+              git pull origin master
+              npm install
+              npm run build
+              npm run start &
+              echo "✅ Deployed to PRODUCTION"
+            EOF
+          fi
