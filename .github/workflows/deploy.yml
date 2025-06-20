@@ -51,18 +51,18 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-          BRANCH=$(echo "${GITHUB_REF#refs/heads/}")
+            BRANCH=$(echo "${GITHUB_REF#refs/heads/}")
 
-          if [ "$BRANCH" = "dev" ]; then
-            APP_DIR="/var/www/newstaging.eboxtenders.com"
-            APP_NAME="eboxtenders-staging"
-          elif [ "$BRANCH" = "master" ]; then
-            APP_DIR="/var/www/production.eboxtenders.com"
-            APP_NAME="eboxtenders-prod"
-          else
-            echo "🚫 Unsupported branch: $BRANCH"
-            exit 1
-          fi
+            if [ "$BRANCH" = "dev" ]; then
+              APP_DIR="/var/www/newstaging.eboxtenders.com"
+              APP_NAME="eboxtenders-staging"
+            elif [ "$BRANCH" = "master" ]; then
+              APP_DIR="/var/www/production.eboxtenders.com"
+              APP_NAME="eboxtenders-prod"
+            else
+              echo "🚫 Unsupported branch: $BRANCH"
+              exit 1
+            fi
 
             echo "🔐 Setting permissions for $APP_DIR"
             sudo git config --global --add safe.directory "$APP_DIR"
