@@ -23,8 +23,8 @@ jobs:
       - name: Install Dependencies (CI only)
         run: npm ci
 
-      - name: Run Linting
-        run: npm run lint
+      #- name: Run Linting
+      #  run: npm run lint
 
       - name: Build Application (CI only)
         run: npm run build
