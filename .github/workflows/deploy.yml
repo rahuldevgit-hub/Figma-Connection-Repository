@@ -50,6 +50,10 @@ jobs:
           port: 22
           envs: GITHUB_REF
           script: |
+            set -euo pipefail
+
+            trap 'echo "❌ Deployment failed for branch: ${BRANCH:-unknown}"' ERR
+
             BRANCH=$(echo "${GITHUB_REF#refs/heads/}")
 
             if [ "$BRANCH" = "dev" ]; then
