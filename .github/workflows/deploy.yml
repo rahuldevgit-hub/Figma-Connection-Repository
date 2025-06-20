@@ -20,12 +20,6 @@ jobs:
           node-version: "18"
           cache: "npm"
 
-      - name: Install Dependencies (CI only)
-        run: npm ci
-
-      - name: Build Application (CI only)
-        run: npm run build
-
       - name: Validate SSH Secrets
         run: |
           if [ -z "${{ secrets.AWS_HOST_IP }}" ]; then
@@ -51,7 +45,6 @@ jobs:
           envs: GITHUB_REF
           script: |
             set -euo pipefail
-
             trap 'echo "❌ Deployment failed for branch: ${BRANCH:-unknown}"' ERR
 
             BRANCH=$(echo "${GITHUB_REF#refs/heads/}")
@@ -83,6 +76,12 @@ jobs:
 
             echo "🔨 Building the application"
             npm run build
+
+            echo "📡 Ensuring PM2 is installed"
+            if ! command -v pm2 &> /dev/null; then
+              echo "Installing PM2..."
+              npm install -g pm2
+            fi
 
             echo "🚀 Restarting application with PM2 as $APP_NAME"
             pm2 delete "$APP_NAME" || true
