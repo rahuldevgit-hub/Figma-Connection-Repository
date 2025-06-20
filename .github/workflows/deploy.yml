@@ -3,8 +3,8 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - master
       - dev
+      - master
 
 jobs:
   deploy:
@@ -22,9 +22,6 @@ jobs:
 
       - name: Install Dependencies (CI only)
         run: npm ci
-
-      #- name: Run Linting
-      #  run: npm run lint
 
       - name: Build Application (CI only)
         run: npm run build
@@ -50,6 +47,8 @@ jobs:
           host: ${{ secrets.AWS_HOST_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
+          port: 22
+          envs: GITHUB_REF
           script: |
             BRANCH=$(echo "${GITHUB_REF#refs/heads/}")
 
