@@ -1,4 +1,37 @@
 node_modules
 
-*storybook.log
-storybook-static
+deploy.sh
+
+#.env
+.env
+
+# .env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# build output
+.next/
+
+# test results
+test-results/
+
+# SWC cache
+.swc/
+
+# lock files
+package-lock.json
+yarn.lock
+
+# misc
+*.log
+
+# cache directories
+.cache/
+
+#dist/
+dist/
+
+#build/
+build/
