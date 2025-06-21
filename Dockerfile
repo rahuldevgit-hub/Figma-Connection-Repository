@@ -3,7 +3,7 @@ FROM node:lts AS development
 WORKDIR /app
 
 # 1. First copy package.json and yarn.lock (for caching)
-COPY package.json yarn.lock ./
+COPY package.json package-lock.json ./
 
 # 2. Install all dependencies (including devDependencies)
 RUN npm install
