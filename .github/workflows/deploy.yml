@@ -47,9 +47,11 @@ jobs:
             if [ "$BRANCH" = "dev" ]; then
               APP_DIR="/var/www/newstaging.eboxtenders.com"
               DOCKER_FILE="docker-compose.dev.yml"
+              ENV_FILE=".env.staging"
             elif [ "$BRANCH" = "master" ]; then
               APP_DIR="/var/www/production.eboxtenders.com"
               DOCKER_FILE="docker-compose.dev.yml"
+              ENV_FILE=".env.production"
             else
               echo "🚫 Unsupported branch: $BRANCH"
               exit 1
@@ -63,9 +65,13 @@ jobs:
             cd "$APP_DIR"
             git pull origin "$BRANCH"
 
-            echo "🐳 Building and restarting Docker container"
-            docker compose -f $DOCKER_FILE down
-            docker compose -f $DOCKER_FILE pull || true
-            docker compose -f $DOCKER_FILE up --build -d
+            if [ ! -f "$ENV_FILE" ]; then
+              echo "❌ $ENV_FILE not found in $APP_DIR"
+              exit 1
+            fi
+
+            echo "🐳 Restarting Docker with env: $ENV_FILE"
+            docker compose -f $DOCKER_FILE --env-file $ENV_FILE down
+            docker compose -f $DOCKER_FILE --env-file $ENV_FILE up --build -d
 
             echo "✅ Docker deployment done for $BRANCH"
