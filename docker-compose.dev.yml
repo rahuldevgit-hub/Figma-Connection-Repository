@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  nextjs-app:
-    container_name: nextjs-app
+  eboxtenders-staging-app:
+    container_name: eboxtenders-staging-app
     build:
       context: .
       dockerfile: Dockerfile
