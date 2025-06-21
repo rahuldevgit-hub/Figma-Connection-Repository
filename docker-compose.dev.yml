@@ -12,6 +12,4 @@ services:
     environment:
       NODE_ENV: ${NODE_ENV:-production}
       PORT: ${PORT:-3001}
-    env_file:
-      - ${ENV_PATH:-.env}
     restart: unless-stopped
