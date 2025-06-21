@@ -50,7 +50,7 @@ jobs:
               ENV_FILE=".env.staging"
             elif [ "$BRANCH" = "master" ]; then
               APP_DIR="/var/www/production.eboxtenders.com"
-              DOCKER_FILE="docker-compose.dev.yml"
+              DOCKER_FILE="docker-compose.prod.yml"
               ENV_FILE=".env.production"
             else
               echo "🚫 Unsupported branch: $BRANCH"
