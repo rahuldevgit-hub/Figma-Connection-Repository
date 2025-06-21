@@ -14,18 +14,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-          cache: "npm"
-
-      #- name: Install Dependencies (CI only)
-      #  run: npm ci
-
-      #- name: Build Application (CI only)
-      #  run: npm run build
-
       - name: Validate SSH Secrets
         run: |
           if [ -z "${{ secrets.AWS_HOST_IP }}" ]; then
@@ -41,7 +29,7 @@ jobs:
             exit 1
           fi
 
-      - name: Deploy to EC2
+      - name: Deploy via SSH and Docker
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.AWS_HOST_IP }}
@@ -58,10 +46,10 @@ jobs:
 
             if [ "$BRANCH" = "dev" ]; then
               APP_DIR="/var/www/newstaging.eboxtenders.com"
-              APP_NAME="eboxtenders-staging"
+              DOCKER_FILE="docker-compose.dev.yml"
             elif [ "$BRANCH" = "master" ]; then
               APP_DIR="/var/www/production.eboxtenders.com"
-              APP_NAME="eboxtenders-prod"
+              DOCKER_FILE="docker-compose.prod.yml"
             else
               echo "🚫 Unsupported branch: $BRANCH"
               exit 1
@@ -75,18 +63,9 @@ jobs:
             cd "$APP_DIR"
             git pull origin "$BRANCH"
 
-            echo "🧹 Cleaning previous builds and caches"
-            rm -rf node_modules .next .cache
+            echo "🐳 Building and restarting Docker container"
+            docker compose -f $DOCKER_FILE down
+            docker compose -f $DOCKER_FILE pull || true
+            docker compose -f $DOCKER_FILE up --build -d
 
-            echo "📥 Installing dependencies"
-            npm ci
-
-            echo "🔨 Building the application"
-            npm run build
-
-            echo "🚀 Restarting application with PM2 as $APP_NAME"
-            pm2 delete "$APP_NAME" || true
-            pm2 start npm --name "$APP_NAME" -- run start
-            pm2 save
-
-            echo "✅ Deployment completed for $BRANCH → $APP_NAME"
+            echo "✅ Docker deployment done for $BRANCH"
