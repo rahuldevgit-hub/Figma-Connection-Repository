@@ -39,10 +39,9 @@ jobs:
           envs: GITHUB_REF
           script: |
             set -euo pipefail
-
             trap 'echo "❌ Deployment failed for branch: ${BRANCH:-unknown}"' ERR
 
-            BRANCH=$(echo "${GITHUB_REF#refs/heads/}")
+            BRANCH="${GITHUB_REF#refs/heads/}"
 
             if [ "$BRANCH" = "dev" ]; then
               APP_DIR="/var/www/newstaging.eboxtenders.com"
@@ -71,7 +70,16 @@ jobs:
             fi
 
             echo "🐳 Restarting Docker with env: $ENV_FILE"
-            docker compose -f $DOCKER_FILE --env-file $ENV_FILE down
-            docker compose -f $DOCKER_FILE --env-file $ENV_FILE up --build -d
 
-            echo "✅ Docker deployment done for $BRANCH"
+            # Clean up existing container (if exists) to prevent naming conflicts
+            EXISTING_CONTAINER=$(docker ps -aqf "name=nextjs-app")
+            if [ -n "$EXISTING_CONTAINER" ]; then
+              echo "⚠️ Removing existing container: nextjs-app"
+              docker rm -f nextjs-app || true
+            fi
+
+            # Rebuild and restart containers with fresh state
+            docker compose -f $DOCKER_FILE --env-file $ENV_FILE down
+            docker compose -f $DOCKER_FILE --env-file $ENV_FILE up --build --force-recreate --remove-orphans -d
+
+            echo "✅ Docker deployment completed for branch: $BRANCH"
