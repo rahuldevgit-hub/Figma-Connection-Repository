@@ -3,7 +3,7 @@ node_modules
 deploy.sh
 
 #.env
-.env
+.env.*
 
 # .env
 .env.local

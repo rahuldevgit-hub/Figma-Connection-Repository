@@ -5,10 +5,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: production
+      target: ${BUILD_TARGET:-production}
     ports:
-      - "3001:3001"
+      - "${HOST_PORT:-3001}:${PORT:-3001}"  # dynamic host:container port
     environment:
-      - NODE_ENV=production
-      - PORT=3001
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=${PORT:-3001}
+    env_file:
+      - .env  # override using --env-file during deployment
     restart: unless-stopped
