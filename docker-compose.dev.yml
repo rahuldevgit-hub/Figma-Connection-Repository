@@ -2,13 +2,16 @@ version: '3.8'
 
 services:
   nextjs-app:
+    container_name: nextjs-app
     build:
       context: .
       dockerfile: Dockerfile
       target: ${BUILD_TARGET:-production}
     ports:
-      - "${HOST_PORT:-3001}:${PORT:-3001}"  # host:container port mapping
+      - "${HOST_PORT}:${PORT}"  # host:container port mapping
     environment:
-      - NODE_ENV=${NODE_ENV:-production}
-      - PORT=${PORT:-3001}
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: ${PORT:-3001}
+    env_file:
+      - ${ENV_PATH:-.env}
     restart: unless-stopped
