@@ -49,7 +49,7 @@ jobs:
               DOCKER_FILE="docker-compose.dev.yml"
             elif [ "$BRANCH" = "master" ]; then
               APP_DIR="/var/www/production.eboxtenders.com"
-              DOCKER_FILE="docker-compose.prod.yml"
+              DOCKER_FILE="docker-compose.dev.yml"
             else
               echo "🚫 Unsupported branch: $BRANCH"
               exit 1
