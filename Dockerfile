@@ -1,21 +1,23 @@
-FROM node:lts AS development
+# Use official Node.js image
+FROM node:lts AS production
 
+# Set working directory
 WORKDIR /app
 
-# 1. First copy package.json and yarn.lock (for caching)
+# Copy dependency files
 COPY package.json package-lock.json ./
 
-# 2. Install all dependencies (including devDependencies)
+# Install all dependencies (you can change to --production if truly needed)
 RUN npm install
 
-# 3. Copy the rest of the app
+# Copy the rest of the application
 COPY . .
 
-# 4. Build the Next.js app
+# Build the Next.js app
 RUN npm run build
 
-# 5. Expose the port (if your app runs on 3010)
+# Expose port
 EXPOSE 3001
 
-# 6. Run in development mode (with Hot Reload)
+# Start the app in production mode
 CMD ["npm", "start"]
