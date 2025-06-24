@@ -198,7 +198,7 @@ const CustomersPage = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-medium text-gray-900">Customer Manager</h1>
+        <h1 className="text-2xl font-medium text-gray-900">Customers Manager</h1>
         <button
           onClick={() => router.push('/admin/customers/add')}
           className="flex items-center px-4 py-2 bg-[#506ae5] text-white rounded-md hover:opacity-90"
