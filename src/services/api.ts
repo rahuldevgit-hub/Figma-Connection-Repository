@@ -9,6 +9,7 @@ const API = axios.create({
   },
 });
 
+
 // API.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 //   if (typeof window !== 'undefined') {
 //     const token = localStorage.getItem('token');
