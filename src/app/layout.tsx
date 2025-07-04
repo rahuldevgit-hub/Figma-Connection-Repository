@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ClientToaster from "@/components/ClientToaster"; // 👈 import
-
+import ClientToaster from "../components/ClientToaster";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -30,7 +29,7 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         {children}
-        <ClientToaster /> 
+        <ClientToaster/>
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -12,6 +12,7 @@ import { createEmailTempalte } from '@/services/emailTemplateService';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 
+// ✅ Zod schema for validation
 const emailTemplateSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   fromemail: z.string().email('Invalid from email'),
@@ -20,18 +21,19 @@ const emailTemplateSchema = z.object({
   format: z.string().min(1, 'Format is required'),
 });
 
-type FormData = z.infer<typeof emailTemplateSchema>;
+// ✅ Renamed type to avoid conflict with native FormData
+type EmailTemplateFormValues = z.infer<typeof emailTemplateSchema>;
 
 export default function EmailTemplateForm() {
   const router = useRouter();
+  const [formatContent, setFormatContent] = useState(''); // ✅ local state for Summernote
 
   const {
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<EmailTemplateFormValues>({
     resolver: zodResolver(emailTemplateSchema),
     defaultValues: {
       title: '',
@@ -42,13 +44,7 @@ export default function EmailTemplateForm() {
     },
   });
 
-  const formatValue = watch('format');
-
-  useEffect(() => {
-    register('format', { required: true });
-  }, [register]);
-
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: EmailTemplateFormValues) => {
     try {
       const response = await createEmailTempalte(data);
       if (response?.status === true) {
@@ -78,7 +74,7 @@ export default function EmailTemplateForm() {
             >
               <ArrowLeft className="h-5 w-5 mr-1" />
             </button>
-            <h1 className="text-xl font-semibold text-gray-900">Add Email Template</h1>
+            <h1 className="text-xl font-medium text-gray-800">Add Email Template</h1>
           </div>
         </div>
       </header>
@@ -114,15 +110,20 @@ export default function EmailTemplateForm() {
             </div>
           </div>
 
+          {/* Format field with Summernote */}
           <div>
             <Label htmlFor="format">Format <span className="text-red-600">*</span></Label>
             <SummernoteEditor
-              value={formatValue}
-              onChange={(html) => setValue('format', html, { shouldValidate: true })}
+              value={formatContent}
+              onChange={(html) => {
+                setFormatContent(html);
+                setValue('format', html, { shouldValidate: true });
+              }}
             />
             {errors.format && <p className="text-red-600 text-sm">{errors.format.message}</p>}
           </div>
 
+          {/* Action buttons */}
           <div className="pt-4 flex justify-between">
             <button
               type="button"

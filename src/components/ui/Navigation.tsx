@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { usePathname } from "next/navigation"; // ✅ NEW
+import { usePathname } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
 import {
   LayoutDashboard,
   Users,
@@ -20,24 +20,33 @@ import {
 } from "lucide-react";
 
 const Navigation = () => {
-  const pathname = usePathname(); // ✅ Get current route
+  const pathname = usePathname();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Extract top-level key from pathname
   const getActiveMenuFromPath = () => {
-    if (pathname.includes("/admin/emailtemplate")) return "emails";
-    if (pathname.includes("/admin/dashboard")) return "dashboard";
-    if (pathname.includes("/admin/quotes")) return "quotes";
-    if (pathname.includes("/admin/tender")) return "tenders";
-    if (pathname.includes("/admin/auctions")) return "auctions";
-    if (pathname.includes("/admin/listings")) return "listings";
-    if (pathname.includes("/admin/contracts")) return "contracts";
-    if (pathname.includes("/admin/newsletters")) return "newsletters";
-    if (pathname.includes("/admin/payments")) return "payments";
+    if (pathname.includes("/dashboard")) return "dashboard";
+    if (pathname.includes("/users")) return "users";
+    if (pathname.includes("/quotes")) return "quotes";
+    if (pathname.includes("/tender")) return "tender";
+    if (pathname.includes("/auctions")) return "auctions";
+    if (pathname.includes("/listings")) return "listings";
+    if (pathname.includes("/emailtemplate")) return "emailtemplate";
+    if (pathname.includes("/contracts")) return "contracts";
+    if (pathname.includes("/newsletters")) return "newsletters";
+    if (pathname.includes("/payments")) return "payments";
 
-    if (pathname.includes("/admin/users")) return "users";
-    if (pathname.includes("/admin/config")) return "config";
-    if (pathname.includes("/admin/seo")) return "seo";
+    // Configuration menu
+    if (
+      pathname.includes("/config") ||
+      pathname.includes("/admin/category") ||
+      pathname.includes("/admin/subcategory") ||
+      pathname.includes("/admin/incoterms") ||
+      pathname.includes("/admin/units")
+    )
+      return "config";
+
+    if (pathname.includes("/seo")) return "seo";
 
     return null;
   };
@@ -45,107 +54,191 @@ const Navigation = () => {
   const activeMenu = getActiveMenuFromPath();
 
   const baseClasses =
-    "flex items-center space-x-2 text-xs px-2 py-1 rounded-md transition-colors duration-200";
-
+    "flex items-center space-x-2 text-xs px-2 py-1 rounded-md transition-all";
   const getMenuClasses = (menu: string) =>
     `${baseClasses} ${
-      activeMenu === menu ? "bg-blue-500 text-white rounded-[8px]" : "text-blue-500 hover:underline"
+      activeMenu === menu
+        ? "bg-blue-500 text-white !rounded-[8px]"
+        : "text-blue-500 hover:underline"
     }`;
 
-  const menuItems = [
-    { key: "dashboard", label: "Dashboard", icon: <LayoutDashboard size={16} />, href: "/admin/dashboard" },
-    { key: "quotes", label: "Quotes", icon: <Users size={16} />, href: "/admin/quotes" },
-    { key: "tenders", label: "Tenders", icon: <BookText size={16} />, href: "/admin/tender" },
-    { key: "auctions", label: "Auctions", icon: <ShieldHalf size={16} />, href: "/admin/auctions" },
-    { key: "listings", label: "Listings", icon: <User size={16} />, href: "/admin/listings" },
-    { key: "emails", label: "Emails", icon: <Mail size={16} />, href: "/admin/emailtemplate" },
-    { key: "contracts", label: "Contracts", icon: <FileText size={16} />, href: "/admin/contracts" },
-    { key: "newsletters", label: "News Letters", icon: <Newspaper size={16} />, href: "/admin/newsletters" },
-    { key: "payments", label: "Payments", icon: <List size={16} />, href: "/admin/payments" },
-  ];
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-  const dropdowns = {
-    users: {
-      icon: <CircleUserRound size={16} />,
-      items: [
-        { label: "Vendor Manager", href: "/admin/users/vendors" },
-        { label: "Buyer Manager", href: "/admin/users/buyers" },
-        { label: "VRT User", href: "/admin/users/vrt" },
-        { label: "Compliance User", href: "/admin/users/compliance" },
-        { label: "Encryption Key Holder", href: "/admin/users/encryption" },
-        { label: "Evaluators", href: "/admin/users/evaluators" },
-        { label: "Approval Manager", href: "/admin/users/approvals" },
-        { label: "Contract Approve Manager", href: "/admin/users/contracts" },
-      ],
-    },
-    config: {
-      icon: <PieChart size={16} />,
-      items: [
-        { label: "Country Manager", href: "/admin/config/countries" },
-        { label: "Category Manager", href: "/admin/config/categories" },
-        { label: "Subcategory Manager", href: "/admin/config/subcategories" },
-        { label: "Incoterms Manager", href: "/admin/config/incoterms" },
-        { label: "Static Pages Manager", href: "/admin/config/static-pages" },
-        { label: "FAQs Manager", href: "/admin/config/faqs" },
-        { label: "Payment Terms Manager", href: "/admin/config/payment-terms" },
-        { label: "Requester (Department)", href: "/admin/config/requesters/department" },
-        { label: "Requester (Name)", href: "/admin/config/requesters/name" },
-        { label: "Delivery Location", href: "/admin/config/delivery-location" },
-        { label: "Classification Manager", href: "/admin/config/classifications" },
-        { label: "Unit of Measure Manager", href: "/admin/config/uom" },
-        { label: "Help Video Manager", href: "/admin/config/help-videos" },
-      ],
-    },
-    seo: {
-      icon: <Search size={16} />,
-      items: [
-        { label: "Add SEO", href: "/admin/seo/add" },
-        { label: "View SEO", href: "/admin/seo" },
-      ],
-    },
+  useEffect(() => {
+    const pathTriggersDropdown = () => {
+      if (
+        pathname.includes("/admin/category") ||
+        pathname.includes("/admin/subcategory") ||
+        pathname.includes("/admin/incoterms") ||
+        pathname.includes("/admin/units") ||
+        pathname.includes("/config")
+      ) {
+        setActiveDropdown("config");
+      }
+      if (pathname.includes("/seo")) {
+        setActiveDropdown("seo");
+      }
+    };
+    pathTriggersDropdown();
+  }, [pathname]);
+
+  const toggleDropdown = (menu: string) => {
+    setActiveDropdown(activeDropdown === menu ? null : menu);
   };
 
   return (
     <nav className="bg-white border-b shadow-sm">
       <div className="flex flex-wrap items-center justify-between p-4">
-        <div className="flex flex-wrap items-center gap-2 text-xs">
-          {/* Static menu items */}
-          {menuItems.map((item) => (
-            <Link
-              key={item.key}
-              href={item.href}
-              className={getMenuClasses(item.key)}
-            >
-              {item.icon}
-              <span>{item.label}</span>
-            </Link>
-          ))}
+        <div className="flex flex-wrap items-center gap-2 text-xs" ref={dropdownRef}>
+          <Link href="/admin/dashboard" className={getMenuClasses("dashboard")}>
+            <LayoutDashboard size={16} className="text-inherit" />
+            <span>Dashboard</span>
+          </Link>
 
-          {/* Dropdown menus */}
-          {Object.entries(dropdowns).map(([key, { icon, items }]) => (
-            <div key={key} className="relative">
-              <button onClick={() => setActiveDropdown(key)} className={getMenuClasses(key)}>
-                {icon}
-                <span className="capitalize">{key}</span>
-                <ChevronDown size={16} />
-              </button>
-              {activeDropdown === key && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white border rounded-lg shadow-lg z-50 text-gray-900">
-                  <div className="py-2">
-                    {items.map((item) => (
-                      <Link
-                        key={item.label}
-                        href={item.href}
-                        className="block px-4 py-2 text-xs hover:bg-blue-500 hover:text-white"
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
+          {/* Users Dropdown */}
+          {/* <div className="relative">
+            <button onClick={() => toggleDropdown("users")} className={getMenuClasses("users")}>
+              <CircleUserRound size={16} className="text-inherit" />
+              <span>Users</span>
+              <ChevronDown size={16} className="text-inherit" />
+            </button>
+            {activeDropdown === "users" && (
+              <div className="absolute top-full left-0 mt-2 w-64 bg-white border rounded-lg shadow-lg z-50">
+                <div className="py-2 text-gray-900">
+                  {[
+                    "Vendor Manager",
+                    "Buyer Manager",
+                    "VRT User",
+                    "Compliance User",
+                    "Encryption Key Holder",
+                    "Evaluators",
+                    "Approval Manager",
+                    "Contract Approve Manager",
+                  ].map((item) => (
+                    <Link
+                      key={item}
+                      href={`/users/${item.toLowerCase().replace(/ /g, "-")}`}
+                      className="block px-2 py-2 text-xs hover:bg-blue-500 hover:text-white"
+                    >
+                      {item}
+                    </Link>
+                  ))}
                 </div>
-              )}
-            </div>
-          ))}
+              </div>
+            )}
+          </div> */}
+
+          {/* <Link href="/quotes" className={getMenuClasses("quotes")}>
+            <Users size={16} className="text-inherit" />
+            <span>Quotes</span>
+          </Link> */}
+
+          <Link href="/admin/tender" className={getMenuClasses("tender")}>
+            <BookText size={16} className="text-inherit" />
+            <span>Tenders</span>
+          </Link>
+
+          {/* <Link href="/auctions" className={getMenuClasses("auctions")}>
+            <ShieldHalf size={16} className="text-inherit" />
+            <span>Auctions</span>
+          </Link>
+
+          <Link href="/listings" className={getMenuClasses("listings")}>
+            <User size={16} className="text-inherit" />
+            <span>Listings</span>
+          </Link> */}
+
+          <Link href="/admin/emailtemplate" className={getMenuClasses("emailtemplate")}>
+            <Mail size={16} className="text-inherit" />
+            <span>Emails</span>
+          </Link>
+
+          {/* <Link href="/contracts" className={getMenuClasses("contracts")}>
+            <FileText size={16} className="text-inherit" />
+            <span>Contracts</span>
+          </Link> */}
+
+          {/* <Link href="/newsletters" className={getMenuClasses("newsletters")}>
+            <Newspaper size={16} className="text-inherit" />
+            <span>News Letters</span>
+          </Link> */}
+
+          {/* <Link href="/payments" className={getMenuClasses("payments")}>
+            <List size={16} className="text-inherit" />
+            <span>Payments</span>
+          </Link> */}
+
+          {/* Config Dropdown */}
+          <div className="relative">
+            <button onClick={() => toggleDropdown("config")} className={getMenuClasses("config")}>
+              <PieChart size={16} className="text-inherit" />
+              <span>Configuration</span>
+              <ChevronDown size={16} className="text-inherit" />
+            </button>
+            {activeDropdown === "config" && (
+              <div className="absolute top-full left-0 mt-2 w-64 bg-white border rounded-lg shadow-lg z-50">
+                <div className="py-2 text-gray-900">
+                  {[
+                    { name: "Country Manager", href: "/config/country" },
+                    { name: "Category Manager", href: "/admin/category" }, 
+                    { name: "Subcategory Manager", href: "/admin/subcategory" },
+                    { name: "Incoterms Manager", href: "/config/incoterms" },
+                    { name: "Static Pages Manager", href: "/config/static-pages" },
+                    { name: "FAQs Manager", href: "/admin/faqs" },
+                    { name: "Payment Terms Manager", href: "/config/payment-terms-manager" },
+                    { name: "Unit of Measure Manager", href: "/admin/unitofmeasure" },
+                  ].map((item) => {
+                    const isActive = pathname === item.href;
+                    return (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className={`block px-4 py-2 text-xs ${
+                          isActive
+                            ? "bg-blue-500 text-white rounded-md"
+                            : "hover:bg-blue-500 hover:text-white"
+                        }`}
+                      >
+                        {item.name}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* SEO Dropdown */}
+          {/* <div className="relative">
+            <button onClick={() => toggleDropdown("seo")} className={getMenuClasses("seo")}>
+              <Search size={16} className="text-inherit" />
+              <span>SEO</span>
+              <ChevronDown size={16} className="text-inherit" />
+            </button>
+            {activeDropdown === "seo" && (
+              <div className="absolute top-full left-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-50">
+                <div className="py-2 text-gray-900">
+                  {["Add SEO", "View SEO"].map((item) => (
+                    <Link
+                      key={item}
+                      href={`/seo/${item.toLowerCase().replace(/ /g, "-")}`}
+                      className="block px-4 py-2 text-xs hover:bg-blue-500 hover:text-white"
+                    >
+                      {item}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div> */}
         </div>
       </div>
     </nav>

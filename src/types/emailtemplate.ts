@@ -3,7 +3,7 @@ export type EmailTempalte = {
   title: string;
   fromemail: string;
   adminemail: string;
-  subject: string;       // ✅ Add this
+  subject: string;       
   format: string;
   createdAt?: string;
   updatedAt?: string;

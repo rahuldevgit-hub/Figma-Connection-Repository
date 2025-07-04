@@ -95,7 +95,7 @@ export default function EditEmailTemplate() {
             >
               <ArrowLeft className="h-5 w-5 mr-1" />
             </button>
-            <h1 className="text-xl font-semibold text-gray-900">Edit Email Template</h1>
+            <h1 className="text-xl font-medium text-gray-800">Edit Email Template</h1>
           </div>
         </div>
       </header>

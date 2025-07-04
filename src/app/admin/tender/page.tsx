@@ -294,7 +294,7 @@ export default function EmailTemplateList() {
             {/* Filter Section */}
             <div className='border  shadow-xl p-2'>
               <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Tender</h2>
+              <h2 className="text-xl font-medium text-gray-800">Tenders List</h2>
        {/* <button
         
           className="p-2 rounded-[5px] bg-blue-500 text-black hover:bg-blue-700 "

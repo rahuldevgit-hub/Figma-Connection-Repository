@@ -194,7 +194,7 @@ export default function EmailTemplateList() {
       <main className="max-w-10xl py-2">
         <div className="border shadow-xl p-2">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">Email Templates</h2>
+            <h2 className="text-xl font-medium text-gray-800">Email Templates</h2>
             <button
               title="Add Email Template"
               onClick={() => router.push('/admin/emailtemplate/add')}
