@@ -1,4 +1,5 @@
 import moment from 'moment';
 
-export const formatDate = (date: string, format = "DD-MM-YYYY"  ) =>
-  moment(date).format(format);
+export const formatDate = (date: string | Date, format: string = 'DD-MM-YYYY'): string => {
+  return moment(date).format(format);
+};

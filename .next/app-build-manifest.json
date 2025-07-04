@@ -11,15 +11,22 @@
       "static/chunks/main-app.js",
       "static/chunks/app/admin/layout.js"
     ],
-    "/admin/customers/page": [
+    "/admin/emailtemplate/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin/customers/page.js"
+      "static/chunks/app/admin/emailtemplate/page.js"
     ],
-    "/admin/customers/edit/page": [
+    "/admin/emailtemplate/add/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin/customers/edit/page.js"
+      "static/css/app/admin/emailtemplate/add/page.css",
+      "static/chunks/app/admin/emailtemplate/add/page.js"
+    ],
+    "/admin/emailtemplate/edit/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/admin/emailtemplate/edit/[id]/page.css",
+      "static/chunks/app/admin/emailtemplate/edit/[id]/page.js"
     ]
   }
 }

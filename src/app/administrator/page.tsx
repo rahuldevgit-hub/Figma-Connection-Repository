@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -10,10 +10,9 @@ import { AdminLogin } from '@/services/adminService';
 import { setToken } from '@/lib/auth';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
-import Input from '@/components/ui/Input';
+import {Input} from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
-import Label from '@/components/ui/Label';
-
+import {Label} from '@/components/ui/Label';
 
 // Zod Schema
 const schema = z.object({
@@ -27,6 +26,11 @@ const LoginScreen = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const {
     register,
@@ -36,10 +40,10 @@ const LoginScreen = () => {
     resolver: zodResolver(schema),
   });
 
-const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (data: LoginFormData) => {
     setLoading(true);
     try {
-const response = await AdminLogin(data as { email: string; password: string });
+      const response = await AdminLogin(data as { email: string; password: string });
 
       if (response.status === true) {
         setToken('admin_token', response.access_token);
@@ -55,6 +59,7 @@ const response = await AdminLogin(data as { email: string; password: string });
     }
   };
 
+  if (!isClient) return null;
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
@@ -94,13 +99,13 @@ const response = await AdminLogin(data as { email: string; password: string });
                       placeholder="Enter your password"
                       className="text-black"
                     />
-                    <button
+                    <Button
                       type="button"
                       onClick={() => setShowPassword((prev) => !prev)}
                       className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-600"
                     >
                       {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
+                    </Button>
                   </div>
                   {errors.password && (
                     <p className="text-sm text-red-600 mt-1">{errors.password.message}</p>
@@ -108,7 +113,8 @@ const response = await AdminLogin(data as { email: string; password: string });
                 </div>
 
                 {/* Submit */}
-                <Button type="submit" className="mt-4 w-full" disabled={loading}>
+                <Button type="submit"         className="w-full bg-blue-500 hover:bg-blue-700  rounded-[5px] w-full "
+ disabled={loading}>
                   {loading ? 'Logging in...' : 'Login'}
                 </Button>
               </form>

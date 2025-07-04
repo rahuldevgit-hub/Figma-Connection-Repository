@@ -8,8 +8,8 @@ import { z } from 'zod';
 import { Upload } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import Label from '@/components/ui/Label';
-import Input from '@/components/ui/Input';
+import {Label} from '@/components/ui/Label';
+import {Input} from '@/components/ui/Input';
 
 // Define Zod schema for customer form validation
 

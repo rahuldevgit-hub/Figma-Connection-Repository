@@ -8,8 +8,8 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { Upload } from 'lucide-react';
 import { updateCustomer, getCustomerById } from '@/services/customerService';
-import Label from '@/components/ui/Label';
-import Input from '@/components/ui/Input';
+import {Label} from '@/components/ui/Label';
+import {Input} from '@/components/ui/Input';
 
 const customerSchema = z.object({
   name: z.string().min(1, "Name is required"),

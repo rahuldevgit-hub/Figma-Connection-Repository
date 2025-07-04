@@ -1,5 +1,6 @@
 {
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/admin/customers/page": "app/admin/customers/page.js",
-  "/admin/customers/edit/page": "app/admin/customers/edit/page.js"
+  "/admin/emailtemplate/edit/[id]/page": "app/admin/emailtemplate/edit/[id]/page.js",
+  "/admin/emailtemplate/page": "app/admin/emailtemplate/page.js",
+  "/admin/emailtemplate/add/page": "app/admin/emailtemplate/add/page.js"
 }

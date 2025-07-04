@@ -30,7 +30,7 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         {children}
-        <ClientToaster /> {/* 👈 add toaster here */}
+        <ClientToaster /> 
       </body>
     </html>
   );

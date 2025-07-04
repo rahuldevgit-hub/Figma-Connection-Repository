@@ -1,52 +1,25 @@
-'use client';
-import React from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import * as React from 'react';
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  showToggle?: boolean;
-  showPassword?: boolean;
-  onTogglePasswordVisibility?: () => void;
-};
+import { cn } from '@/lib/utils';
+
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  (
-    {
-      type = 'text',
-      className = '',
-      showToggle = false,
-      showPassword = false,
-      onTogglePasswordVisibility,
-      ...props
-    },
-    ref
-  ) => {
-    const isPasswordField = type === 'password' && showToggle;
-
+  ({ className, type, ...props }, ref) => {
     return (
-      <div className={`relative ${className}`}>
-        <input
-          ref={ref}
-          type={isPasswordField && showPassword ? 'text' : type}
-          className={`
-      w-full px-3 py-2 border border-gray-300 rounded-md 
-             focus:outline-none focus:ring-0 focus:border-2 text-black
-            ${isPasswordField ? 'pr-12' : ''}
-          `}
-          {...props}
-        />
-
-        {isPasswordField && onTogglePasswordVisibility && (
-          <div
-            className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
-            onClick={onTogglePasswordVisibility}
-          >
-            {showPassword ? <EyeOff className="text-gray-500" /> : <Eye className="text-gray-500" />}
-          </div>
+      <input
+        type={type}
+        className={cn(
+          'flex h-9 w-full rounded-lg border border-input  border-gray-300 bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium  placeholder:text-muted-foreground focus-visible:outline-nonedisabled:cursor-not-allowed disabled:opacity-50 text-gray-800',
+          className
         )}
-      </div>
+        ref={ref}
+        {...props}
+      />
     );
   }
 );
-
 Input.displayName = 'Input';
-export default Input;
+
+export { Input };

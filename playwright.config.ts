@@ -7,6 +7,6 @@ testDir: './src/tests/e2e',
     viewport: { width: 1280, height: 720 },
     screenshot: 'on',
     video: 'retain-on-failure',
-    baseURL: 'http://localhost:3001',
+    baseURL: 'http://localhost:3002',
   },
 });
