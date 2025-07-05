@@ -132,7 +132,7 @@ const CategoryListPage = () => {
       showCancelButton: true,
       confirmButtonColor: "#506ae5",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes, delete it! r",
     });
 
     if (result.isConfirmed) {
