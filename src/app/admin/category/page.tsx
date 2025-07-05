@@ -132,7 +132,7 @@ const CategoryListPage = () => {
       showCancelButton: true,
       confirmButtonColor: "#506ae5",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it! r",
+      confirmButtonText: "Yes, delete it!",
     });
 
     if (result.isConfirmed) {
@@ -208,22 +208,9 @@ const CategoryListPage = () => {
       },
       {
         name: "Created",
-        selector: (row: Category) => formatDate(row.createdAt),
+        selector: (row: Category) => formatDate(row.createdAt,'DD MMM YYYY'),
       },
-      {
-        name: "Status",
-        cell: (row: Category) => (
-          <span
-            className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-              row.status === "Y"
-                ? "bg-green-100 text-green-800"
-                : "bg-red-100 text-red-800"
-            }`}
-          >
-            {row.status === "Y" ? "Active" : "Inactive"}
-          </span>
-        ),
-      },
+     
       {
         name: "Actions",
         cell: (row: Category) => (

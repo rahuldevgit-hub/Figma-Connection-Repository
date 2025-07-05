@@ -10,10 +10,10 @@ import { AdminLogin } from '@/services/adminService';
 import { setToken } from '@/lib/auth';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
-import {Input} from '@/components/ui/Input';
+import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
-import {Label} from '@/components/ui/Label';
-
+import { Label } from '@/components/ui/Label';
+import { SwalConfirm, SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 // Zod Schema
 const schema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email address'),
@@ -47,13 +47,14 @@ const LoginScreen = () => {
 
       if (response.status === true) {
         setToken('admin_token', response.access_token);
-        toast.success('Login successful!');
+        SwalSuccess('Login successful!');
         router.push('/admin/dashboard');
       } else {
-        toast.error(response.message || 'Login failed! Check credentials.');
+        SwalError({ title: "Failed!", message: "Check credentials." });
       }
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Login failed! Try again.');
+      SwalError({ title: "Failed!", message: "Login failed! Try again." });
+
     } finally {
       setLoading(false);
     }
@@ -113,8 +114,8 @@ const LoginScreen = () => {
                 </div>
 
                 {/* Submit */}
-                <Button type="submit"         className="w-full bg-blue-500 hover:bg-blue-700  rounded-[5px] w-full "
- disabled={loading}>
+                <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-700  rounded-[5px] w-full "
+                  disabled={loading}>
                   {loading ? 'Logging in...' : 'Login'}
                 </Button>
               </form>

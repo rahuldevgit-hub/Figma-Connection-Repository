@@ -99,7 +99,7 @@ const FaqPage = () => {
         name: "Title",
         selector: (row) => row.title,
         sortable: true,
-        width: "10%",
+        width: "15%",
       },
       {
         name: "Description",
@@ -126,30 +126,13 @@ const FaqPage = () => {
 
       {
         name: "Created",
-        selector: (row) => formatDate(row.createdAt),
-        width: "20%",
+        selector: (row) => formatDate(row.createdAt,'DD MMM YYYY'),
+        width: "25%",
       },
-      {
-        name: "Status",
-        width: "20%",
-        cell: (row) => {
-          const readableStatus = row.status === "Y" ? "Active" : "InActive";
-          const statusClass =
-            row.status === "Y"
-              ? "bg-green-100 text-green-800"
-              : "bg-red-100 text-red-800";
-          return (
-            <span
-              className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${statusClass}`}
-            >
-              {readableStatus}
-            </span>
-          );
-        },
-      },
+     
       {
         name: "Actions",
-        width: "20%",
+        width: "30%",
         cell: (row) => (
           <div className="flex space-x-3 items-center">
             <div

@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import { ArrowLeft } from 'lucide-react';
 import { Label } from '@/components/ui/Label';
 import { Input } from '@/components/ui/Input';
+import { SwalConfirm, SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 
 const EditIncotermPage = () => {
   const router = useRouter();
@@ -41,10 +42,10 @@ const EditIncotermPage = () => {
       updatedData.append('name', formData.name);
 
       await updateIncoterm(Number(id), updatedData);
-      toast.success('Incoterm has been updated successfully.');
+              SwalSuccess("Incoterm has been updated successfully.");
       router.push('/admin/incoterm');
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Something went wrong');
+                SwalError({ title: "Failed!", message:error?.response?.data?.message || 'Something went wrong'});       
     }
   };
 

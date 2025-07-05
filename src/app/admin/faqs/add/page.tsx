@@ -12,8 +12,8 @@ import { Input } from '@/components/ui/Input';
 import SummernoteEditor from '@/components/ui/SummernoteEditor';
 import { createFaq } from '@/services/faqService';
 import { ArrowLeft } from 'lucide-react';
+import { SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 
-// ✅ Zod schema for validation
 const faqSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().min(1, 'Description is required'),
@@ -44,25 +44,24 @@ export default function AddFaqForm() {
   };
 
   const onSubmit = async (data: FaqFormValues) => {
-  try {
-    const formData = new FormData();
-    formData.append('title', data.title);
-    formData.append('description', data.description);
+    try {
+      const formData = new FormData();
+      formData.append('title', data.title);
+      formData.append('description', data.description);
 
-    const response = await createFaq(formData); // ✅ send as FormData
+      const response = await createFaq(formData);
+      if (response?.status === true) {
+        SwalSuccess('FAQ created successfully!');
+        router.push('/admin/faqs');
+      } else {
+        SwalError({ title: "Failed!", message: response?.message || 'Failed to create FAQ.' });
+      }
+    } catch (error: any) {
+      const message = error?.response?.data?.message || 'An unexpected error occurred.';
+      SwalError({ title: "Failed!", message: message || 'Failed to create FAQ.' });
 
-    if (response?.status === true) {
-      toast.success('FAQ created successfully!', { position: 'top-center' });
-      router.push('/admin/faqs');
-    } else {
-      toast.error(response?.message || 'Failed to create FAQ.');
     }
-  } catch (error: any) {
-    const message =
-      error?.response?.data?.message || 'An unexpected error occurred.';
-    toast.error(message);
-  }
-};
+  };
 
 
   return (

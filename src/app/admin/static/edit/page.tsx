@@ -11,6 +11,7 @@ import SummernoteEditor from "@/components/ui/SummernoteEditor";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 
 const schema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -45,12 +46,11 @@ const EditStaticPage = () => {
 
     const fetchData = async () => {
       try {
-        const data = await getstaticById(Number(staticId)); 
+        const data = await getstaticById(Number(staticId));
         setValue("title", data?.title || "");
         setValue("format", data?.content || "");
         setExistingImage(data?.image || null);
       } catch (err) {
-        toast.error("Failed to load static content");
       } finally {
         setLoading(false);
       }
@@ -67,10 +67,11 @@ const EditStaticPage = () => {
       if (image) formData.append("image", image);
 
       await updatestatic(Number(staticId), formData);
-      toast.success("Static content updated successfully!");
+      SwalSuccess("Static content updated successfully!");
       router.push("/admin/static");
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Something went wrong");
+    } catch (error: any) {
+      SwalError({ title: "Failed!", message: error?.response?.data?.message || 'Something went wrong' });
+
     }
   };
 
@@ -141,7 +142,7 @@ const EditStaticPage = () => {
                   <div className="mt-2 text-base text-green-600">Selected: {image.name}</div>
                 )}
 
-           
+
               </div>
             </div>
           </div>

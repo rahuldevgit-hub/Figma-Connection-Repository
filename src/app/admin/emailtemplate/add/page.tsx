@@ -6,11 +6,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
-import toast from 'react-hot-toast';
 import SummernoteEditor from '@/components/ui/SummernoteEditor';
 import { createEmailTempalte } from '@/services/emailTemplateService';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
+import { SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 
 // ✅ Zod schema for validation
 const emailTemplateSchema = z.object({
@@ -48,14 +48,16 @@ export default function EmailTemplateForm() {
     try {
       const response = await createEmailTempalte(data);
       if (response?.status === true) {
-        toast.success('Email template created successfully!');
+        SwalSuccess('Email template created successfully!');
         router.push('/admin/emailtemplate');
       } else {
-        toast.error(response?.message || 'Failed to create email template.');
+        SwalError({ title: "Failed!", message: response?.message || 'Failed to create email template.' });
+
       }
     } catch (error: any) {
       const message = error?.response?.data?.message || 'Something went wrong.';
-      toast.error(message);
+      SwalError({ title: "Failed!", message: message || 'Failed to create email template.' });
+
     }
   };
 

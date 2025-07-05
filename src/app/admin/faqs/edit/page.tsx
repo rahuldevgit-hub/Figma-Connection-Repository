@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { ArrowLeft } from 'lucide-react';
+import { SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 
 import { Label } from '@/components/ui/Label';
 import { Input } from '@/components/ui/Input';
@@ -48,7 +49,6 @@ export default function EditFaqForm() {
           setLoading(false);
         })
         .catch(() => {
-          toast.error('Failed to fetch FAQ');
           router.push('/admin/faqs');
         });
     }
@@ -61,14 +61,16 @@ export default function EditFaqForm() {
         description: data.description,
       });
       if (response?.status === true) {
-        toast.success('FAQ updated successfully!');
+        SwalSuccess('FAQ updated successfully!');
         router.push('/admin/faqs');
       } else {
-        toast.error(response?.message || 'Failed to update FAQ.');
+        SwalError({ title: "Failed!", message: response?.message || 'Failed to update FAQ.' });
+
       }
     } catch (error: any) {
       const msg = error?.response?.data?.message || 'Unexpected error.';
-      toast.error(msg);
+      SwalError({ title: "Failed!", message: msg || 'Failed to update FAQ.' });
+
     }
   };
 

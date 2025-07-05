@@ -10,6 +10,7 @@ import { createCountry } from '@/services/countryService';
 import { Label } from '@/components/ui/Label';
 import { Input } from '@/components/ui/Input';
 import { ArrowLeft } from 'lucide-react';
+import { SwalConfirm, SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 
 const AddCountryPage = () => {
   const router = useRouter();
@@ -29,10 +30,11 @@ const AddCountryPage = () => {
       formData.append('words', data.words);
 
       await createCountry(formData);
-      toast.success('Country added successfully!');
+              SwalSuccess('Country added successfully!');
       router.push('/admin/country');
     } catch (error) {
-      toast.error(error?.response?.data?.message || 'Something went wrong');
+              SwalError({ title: "Failed!", message: error?.response?.data?.message ||'Something went wrong' });
+
     }
   };
 

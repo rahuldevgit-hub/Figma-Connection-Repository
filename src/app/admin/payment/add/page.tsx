@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { createPayment } from '@/services/paymentService';
 import toast from 'react-hot-toast';
 import { ArrowLeft } from 'lucide-react';
+import { SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 
 const AddPaymentPage = () => {
   const router = useRouter();
@@ -33,17 +34,17 @@ const AddPaymentPage = () => {
     try {
       const data = new FormData();
       data.append('name', formData.name);
-     
+
 
       await createPayment(data);
-      toast.success('Payment term added successfully!');
+      SwalSuccess('Payment term added successfully!');
       router.push('/admin/payment');
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Something went wrong');
+      SwalError({ title: "Failed!", message: error?.response?.data?.message || 'Failed to create Payment term.' });
     }
   };
 
-    const handleChange = (e) => {
+  const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
@@ -60,7 +61,7 @@ const AddPaymentPage = () => {
             >
               <ArrowLeft className="h-5 w-5 mr-1" />
             </button>
-            <h2  className="text-xl font-medium text-gray-800">Add Payment Terms</h2>
+            <h2 className="text-xl font-medium text-gray-800">Add Payment Terms</h2>
           </div>
         </div>
       </header>

@@ -128,29 +128,13 @@ const PaymentsListPage = () => {
       },
       {
         name: "Created",
-        selector: (row: Payment) => formatDate(row.createdAt),
-        width: "25%",
+        selector: (row: Payment) => formatDate(row.createdAt,'DD MMM YYYY'),
+        width: "35%",
       },
-      {
-        name: "Status",
-        width: "15%",
-        cell: (row: Payment) => {
-          const statusClass =
-            row.status === "Y"
-              ? "bg-green-100 text-green-800"
-              : "bg-red-100 text-red-800";
-          return (
-            <span
-              className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${statusClass}`}
-            >
-              {row.status === "Y" ? "Active" : "InActive"}
-            </span>
-          );
-        },
-      },
+    
       {
         name: "Actions",
-        width: "25%",
+        width: "30%",
         cell: (row: Payment) => (
           <div className="flex space-x-3 items-center">
             <div

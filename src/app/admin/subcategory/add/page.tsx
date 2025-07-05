@@ -1,15 +1,16 @@
 "use client";
 
-import { createSubCategory ,getCategory} from "@/services/subcategoryService";
+import { createSubCategory, getCategory } from "@/services/subcategoryService";
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Upload ,ArrowLeft} from "lucide-react";
+import { Upload, ArrowLeft } from "lucide-react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import {Label} from "@/components/ui/Label";
-import {Input} from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { Input } from "@/components/ui/Input";
+import { SwalConfirm, SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 
 const subcategorySchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -40,7 +41,7 @@ export default function AddSubcategoryForm() {
     const fetchCategories = async () => {
       try {
         const res = await getCategory(); // fetch all categories
-             setCategories(res.result||[]);
+        setCategories(res.result || []);
 
       } catch (error) {
         toast.error("Failed to load categories");
@@ -59,14 +60,15 @@ export default function AddSubcategoryForm() {
       const response = await createSubCategory(formDataToSend);
 
       if (response?.status === true) {
-        toast.success("Subcategory has been saved.", { position: "top-center" });
+        SwalSuccess("Subcategory has been saved.");
         router.push("/admin/subcategory");
       } else {
-        toast.error(response?.message || "Failed to create subcategory.", { position: "top-center" });
+        SwalError({ title: "Failed!", message: response?.message || "Failed to create subcategory." });
+
       }
     } catch (error: any) {
       const message = error?.response?.data?.message;
-      toast.error(message || "An error occurred.", { position: "top-center" });
+        SwalError({ title: "Failed!", message: message|| "Failed to create subcategory." });
     }
   };
   const handleBack = () => {
@@ -77,20 +79,20 @@ export default function AddSubcategoryForm() {
       <header className="bg-white shadow-sm border-b">
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-12">
-            <button 
+            <button
               onClick={handleBack}
               className="flex items-center text-gray-600 hover:text-gray-900 mr-4"
             >
               <ArrowLeft className="h-5 w-5 mr-1" />
             </button>
-            <h1  className="text-xl font-medium text-gray-800">Add Sub Category</h1>
+            <h1 className="text-xl font-medium text-gray-800">Add Sub Category</h1>
           </div>
         </div>
       </header>
-            <main className="mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 py-4">
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="bg-white rounded-lg shadow-sm border p-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
 
             <div>
               <Label htmlFor="parent_id">
@@ -109,7 +111,7 @@ export default function AddSubcategoryForm() {
                 ))}
               </select>
               {errors.parent_id && <p className="text-red-600 text-sm mt-1">{errors.parent_id.message}</p>}
-            </div>   
+            </div>
             {/* Subcategory Name */}
             <div>
               <Label htmlFor="name">
@@ -119,7 +121,7 @@ export default function AddSubcategoryForm() {
               {errors.name && <p className="text-red-600 text-sm mt-1 py-1">{errors.name.message}</p>}
             </div>
 
-          
+
           </div>
 
           {/* Buttons */}
@@ -139,8 +141,8 @@ export default function AddSubcategoryForm() {
             </button>
           </div>
         </form>
-        </main>
-      </div>
-  
+      </main>
+    </div>
+
   );
 }

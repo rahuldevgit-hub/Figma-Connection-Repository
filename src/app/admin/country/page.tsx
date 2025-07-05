@@ -11,11 +11,7 @@ import {
   deleteCountry,
   updateCountryStatus
 } from '@/services/countryService';
-
-const DataTable = dynamic(() => import('react-data-table-component'), {
-  ssr: false,
-});
-
+import { formatDate } from "../../../lib/date";
 const CountryPage = () => {
   const router = useRouter();
 
@@ -123,28 +119,17 @@ const CountryPage = () => {
       name: 'Code',
       selector: (row: any) => row.words,
       sortable: true,
-      width: '10%',
+      width: '20%',
     },
     {
       name: 'Created',
-      selector: (row: any) => new Date(row.createdAt).toLocaleDateString(),
+        selector: (row: any) => formatDate(row.createdAt,'DD MMM YYYY'),
       width: '20%',
     },
-    {
-      name: 'Status',
-      width: '20%',
-      cell: (row: any) => (
-        <span
-          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${row.status === 'Y' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-            }`}
-        >
-          {row.status === 'Y' ? 'Active' : 'InActive'}
-        </span>
-      ),
-    },
+   
     {
       name: 'Actions',
-      width: '20%',
+      width: '30%',
       cell: (row: any) => (
         <div className="flex space-x-2 items-center">
           <div

@@ -6,15 +6,16 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
-import { Upload ,ArrowLeft} from "lucide-react";
+import { Upload, ArrowLeft } from "lucide-react";
 
-import {Label} from "@/components/ui/Label";
-import {Input} from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { Input } from "@/components/ui/Input";
 import {
   getSubCategoryById,
   updateSubCategory,
   getCategory,
 } from "@/services/subcategoryService";
+import { SwalConfirm, SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 
 // Validation schema
 const subcategorySchema = z.object({
@@ -93,18 +94,17 @@ export default function EditSubCategoryForm() {
       const response = await updateSubCategory(id, formDataToSend);
 
       if (response?.status === true) {
-        toast.success("Subcategory updated successfully", {
-          position: "top-center",
-        });
+        SwalSuccess("Subcategory updated successfully");
+
+
         router.push("/admin/subcategory");
       } else {
-        toast.error(response?.message || "Failed to update subcategory", {
-          position: "top-center",
-        });
+        SwalError({ title: "Failed!", message: response?.message || "Failed to update subcategory" });
       }
     } catch (error: any) {
       const message = error?.response?.data?.message;
-      toast.error(message || "An error occurred", { position: "top-center" });
+      SwalError({ title: "Failed!", message: message || "Failed to update subcategory" });
+
     }
   };
 
@@ -112,24 +112,24 @@ export default function EditSubCategoryForm() {
     router.push("/admin/subcategory");
   };
   return (
-       <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm border-b">
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-12">
-            <button 
+            <button
               onClick={handleBack}
               className="flex items-center text-gray-600 hover:text-gray-900 mr-4"
             >
               <ArrowLeft className="h-5 w-5 mr-1" />
             </button>
-            <h1  className="text-xl font-medium text-gray-800">Edit  Sub Category</h1>
+            <h1 className="text-xl font-medium text-gray-800">Edit  Sub Category</h1>
           </div>
         </div>
       </header>
-            <main className="mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 py-4">
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="bg-white rounded-lg shadow-sm border p-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
 
             <div>
               <Label htmlFor="parent_id">
@@ -148,7 +148,7 @@ export default function EditSubCategoryForm() {
                 ))}
               </select>
               {errors.parent_id && <p className="text-red-600 text-sm mt-1">{errors.parent_id.message}</p>}
-            </div>   
+            </div>
             {/* Subcategory Name */}
             <div>
               <Label htmlFor="name">
@@ -158,7 +158,7 @@ export default function EditSubCategoryForm() {
               {errors.name && <p className="text-red-600 text-sm mt-1 py-1">{errors.name.message}</p>}
             </div>
 
-          
+
           </div>
 
           {/* Buttons */}
@@ -178,7 +178,7 @@ export default function EditSubCategoryForm() {
             </button>
           </div>
         </form>
-        </main>
-      </div>
+      </main>
+    </div>
   );
 }

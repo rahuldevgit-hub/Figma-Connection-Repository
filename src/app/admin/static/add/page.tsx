@@ -11,6 +11,7 @@ import SummernoteEditor from '@/components/ui/SummernoteEditor';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 
 // Zod validation schema
 const schema = z.object({
@@ -42,10 +43,11 @@ const AddStaticPage = () => {
       if (image) formData.append('image', image);
 
       await createstatic(formData);
-      toast.success('Static content added successfully');
+      SwalSuccess('Static content added successfully');
       router.push('/admin/static');
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Something went wrong');
+      SwalError({ title: "Failed!", message: error?.response?.data?.message || 'Something went wrong' });
+
     }
   };
 

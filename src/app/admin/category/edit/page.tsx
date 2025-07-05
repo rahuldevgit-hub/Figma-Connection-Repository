@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Upload ,ArrowLeft} from "lucide-react";
+import { Upload, ArrowLeft } from "lucide-react";
 import toast from "react-hot-toast";
 import { useRouter, useSearchParams } from "next/navigation";
-import {Label} from "@/components/ui/Label";
-import {Input }from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { Input } from "@/components/ui/Input";
 import { getCategoryById, updateCategory } from "@/services/categoryService";
+import { SwalConfirm, SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 
 // Zod schema
 const categorySchema = z.object({
@@ -28,7 +29,7 @@ export default function EditCategoryForm() {
   const params = useSearchParams();
   const id = params.get("id");
 
- 
+
   const [existingImage, setExistingImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [Image, setImage] = useState<File | null>(null);
@@ -50,10 +51,8 @@ export default function EditCategoryForm() {
           if (response?.result) {
             setValue("name", response.result.name);
             setValue("category", response.result.cat_for); // should be "0", "1", or "2"
-          
           }
         } catch {
-          toast.error("Failed to load category.");
         } finally {
           setLoading(false);
         }
@@ -66,7 +65,7 @@ export default function EditCategoryForm() {
       const formData = new FormData();
       formData.append("name", data.name);
       formData.append("cat_for", data.category);
-      
+
       if (Image) {
         formData.append("image", Image);
       }
@@ -74,17 +73,16 @@ export default function EditCategoryForm() {
       const response = await updateCategory(id, formData);
 
       if (response?.status === true) {
-        toast.success("Category has been updated", { position: "top-center" });
+        SwalSuccess('Category has been updated.');
         router.push("/admin/category");
       } else {
-        toast.error(response?.message || "Failed to update category.", {
-          position: "top-center",
-        });
+        SwalError({ title: "Failed!", message: response?.message || "Failed to update category." });
+
       }
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Something went wrong", {
-        position: "top-center",
-      });
+      SwalError({ title: "Failed!", message: error?.response?.data?.message || "Failed to update category." });
+
+
     }
   };
 
@@ -105,7 +103,7 @@ export default function EditCategoryForm() {
             >
               <ArrowLeft className="h-5 w-5 mr-1" />
             </button>
-            <h1  className="text-xl font-medium text-gray-800">Edit Category</h1>
+            <h1 className="text-xl font-medium text-gray-800">Edit Category</h1>
           </div>
         </div>
       </header>
@@ -167,33 +165,33 @@ export default function EditCategoryForm() {
             </div>
 
             {/* Image Upload */}
-                 <div>
-            <Label htmlFor="profile-upload">Image</Label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
-              <input
-                id="profile-upload"
-                type="file"
-                className="hidden"
-                accept=".jpg,.jpeg,.png"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const validTypes = ['image/jpeg', 'image/png'];
-                    if (validTypes.includes(file.type)) {
-                      setImage(file);
-                    } else {
-                      toast.error("Only JPG and PNG images are allowed.");
+            <div>
+              <Label htmlFor="profile-upload">Image</Label>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+                <input
+                  id="profile-upload"
+                  type="file"
+                  className="hidden"
+                  accept=".jpg,.jpeg,.png"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const validTypes = ['image/jpeg', 'image/png'];
+                      if (validTypes.includes(file.type)) {
+                        setImage(file);
+                      } else {
+                        toast.error("Only JPG and PNG images are allowed.");
+                      }
                     }
-                  }
-                }}
-              />
-              <label htmlFor="profile-upload" className="cursor-pointer flex flex-col items-center">
-                <Upload className="h-12 w-12 text-gray-400" />
-                <span className="mt-2 text-base text-gray-600">Click to upload profile image</span>
-              </label>
-              {Image && <div className="mt-2 text-base text-green-600">Selected: {Image.name}</div>}
+                  }}
+                />
+                <label htmlFor="profile-upload" className="cursor-pointer flex flex-col items-center">
+                  <Upload className="h-12 w-12 text-gray-400" />
+                  <span className="mt-2 text-base text-gray-600">Click to upload profile image</span>
+                </label>
+                {Image && <div className="mt-2 text-base text-green-600">Selected: {Image.name}</div>}
+              </div>
             </div>
-          </div>
           </div>
 
           {/* Action Buttons */}

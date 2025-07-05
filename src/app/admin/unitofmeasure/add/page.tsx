@@ -5,9 +5,10 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import {Label} from '@/components/ui/Label';
-import {Input} from '@/components/ui/Input';
+import { Label } from '@/components/ui/Label';
+import { Input } from '@/components/ui/Input';
 import { createUnitMeasure } from '@/services/unitmeasureService';
+import { SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 
 
 import { ArrowLeft } from 'lucide-react';
@@ -35,24 +36,25 @@ export default function AddunitofMreasureForm() {
     try {
       const formDataToSend = new FormData();
       formDataToSend.append('title', data.title);
-     
+
 
       const response = await createUnitMeasure(formDataToSend);
 
       if (response?.status === true) {
-        toast.success('Unit measure created successfully!',{ position: 'top-center' });
+        SwalSuccess('Unit measure created successfully!');
         router.push('/admin/unitofmeasure');
       } else {
-        toast.error(response?.message || 'Failed to create unitMeasure.');
+        SwalError({ title: "Failed!", message: response?.message || 'Failed to create unitMeasure.' });
       }
     } catch (error: any) {
-      const message = error?.response?.data?.message || 'An unexpected error occurred.';      
-      toast.error(message);
+      const message = error?.response?.data?.message || 'An unexpected error occurred.';
+      SwalError({ title: "Failed!", message: message || 'Failed to create unitMeasure.' });
+
     }
   };
 
   return (
-        <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm border-b">
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-12">
@@ -62,7 +64,7 @@ export default function AddunitofMreasureForm() {
             >
               <ArrowLeft className="h-5 w-5 mr-1" />
             </button>
-            <h1  className="text-xl font-medium text-gray-800">Add Unit Of Measure</h1>
+            <h1 className="text-xl font-medium text-gray-800">Add Unit Of Measure</h1>
           </div>
         </div>
       </header>

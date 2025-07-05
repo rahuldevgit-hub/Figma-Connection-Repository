@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter, useParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { ArrowLeft } from 'lucide-react';
+import { SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
@@ -60,7 +61,6 @@ export default function EditEmailTemplate() {
         setInitialFormat(data.format || '');
       }
     } catch (err) {
-      toast.error('Failed to load template');
     }
   };
 
@@ -74,13 +74,16 @@ export default function EditEmailTemplate() {
 
       const res = await updateEmailTempalte(id, data);
       if (res.status === true) {
-        toast.success('Email Template updated!');
+        SwalSuccess('Email Template updated!');
         router.push('/admin/emailtemplate');
       } else {
-        toast.error(res?.message || 'Failed to update');
+        SwalError({ title: "Failed!", message: res?.message || 'Failed to update' });
+
       }
     } catch (err: any) {
       toast.error(err?.response?.data?.message || 'Something went wrong');
+      SwalError({ title: "Failed!", message: err?.response?.data?.message || 'Failed to update' });
+
     }
   };
 

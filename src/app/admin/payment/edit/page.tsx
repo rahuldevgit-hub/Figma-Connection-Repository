@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import { ArrowLeft } from 'lucide-react';
 import { Label } from '@/components/ui/Label';
 import { Input } from '@/components/ui/Input';
+import { SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 
 const EditPaymentPage = () => {
   const router = useRouter();
@@ -28,7 +29,6 @@ const EditPaymentPage = () => {
           name: data?.name || '',
         });
       } catch (err) {
-        toast.error('Failed to load payment content');
       } finally {
         setLoading(false);
       }
@@ -56,11 +56,12 @@ const EditPaymentPage = () => {
 
       if (paymentId) {
         await updatePayment(paymentId, data);
-        toast.success('Payment term updated successfully!');
+        SwalSuccess('Payment term updated successfully!');
         router.push('/admin/payment');
       }
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Something went wrong');
+      SwalError({ title: "Failed!", message: err?.response?.data?.message || 'Something went wrong' });
+
     }
   };
 
@@ -86,7 +87,7 @@ const EditPaymentPage = () => {
             >
               <ArrowLeft className="h-5 w-5 mr-1" />
             </button>
-            <h2  className="text-xl font-medium text-gray-800">Edit Payment Terms</h2>
+            <h2 className="text-xl font-medium text-gray-800">Edit Payment Terms</h2>
           </div>
         </div>
       </header>

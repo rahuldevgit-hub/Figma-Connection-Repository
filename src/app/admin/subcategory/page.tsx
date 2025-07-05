@@ -186,27 +186,13 @@ const SubCategoryListPage = () => {
     },
     {
       name: "Created",
-      selector: (row: any) => row.createdAt ? formatDate(row.createdAt) : "-",
-      width: "15%",
+      selector: (row: any) => row.createdAt ? formatDate(row.createdAt,'DD MMM YYYY') : "-",
+      width: "20%",
     },
-    {
-      name: "Status",
-      width: "10%",
-      cell: (row: any) => {
-        const statusClass =
-          row.status === "Y"
-            ? "bg-green-100 text-green-800"
-            : "bg-red-100 text-red-800";
-        return (
-          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${statusClass}`}>
-            {row.status === "Y" ? "Active" : "InActive"}
-          </span>
-        );
-      },
-    },
+   
     {
       name: "Actions",
-      width: "25%",
+      width: "30%",
       cell: (row: any) => (
         <div className="flex space-x-3 items-center">
           <button

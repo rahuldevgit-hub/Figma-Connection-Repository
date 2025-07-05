@@ -11,7 +11,7 @@ import {
   updatestaticStatus,
 } from "@/services/staticService";
 import { formatDate } from "../../../lib/date";
-
+import { Input } from "@/components/ui/Input";
 const DataTable = dynamic(() => import("react-data-table-component"), {
   ssr: false,
 });
@@ -119,7 +119,7 @@ const StaticServiceListPage = () => {
       {
         name: "Image",
         selector: (row: any) => row.image || "N/A",
-        width: "15%",
+        width: "25%",
         cell: (row: any) =>
           row.image ? (
             <img
@@ -138,26 +138,10 @@ const StaticServiceListPage = () => {
       },
       {
         name: "Created",
-        selector: (row: any) => formatDate(row.createdAt),
+        selector: (row: any) => formatDate(row.createdAt,'DD MMM YYYY'),
         width: "15%",
       },
-      {
-        name: "Status",
-        width: "10%",
-        cell: (row: any) => {
-          const statusClass =
-            row.status === "Y"
-              ? "bg-green-100 text-green-800"
-              : "bg-red-100 text-red-800";
-          return (
-            <span
-              className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${statusClass}`}
-            >
-              {row.status === "Y" ? "Active" : "Inactive"}
-            </span>
-          );
-        },
-      },
+    
       {
         name: "Actions",
         width: "29%",
@@ -217,13 +201,16 @@ const StaticServiceListPage = () => {
           </div>
 
           <div className="flex space-x-3 text-black mb-4">
-            <input
-              type="text"
-              placeholder="Title"
-              value={searchText}
+             <div>
+                <Input
+                  id="reference"
+                  type="text"
+                  className="w-full h-10 text-black text-sm border-gray-200 rounded-[5px]"
+                  placeholder="Title"
+                   value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              className="border px-2 py-1 rounded w-64"
-            />
+                />
+              </div>
             <button
               onClick={handleSearch}
               className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"

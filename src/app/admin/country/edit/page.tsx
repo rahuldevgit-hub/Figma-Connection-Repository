@@ -11,6 +11,7 @@ import { countrySchema, CountryFormValues } from '@/schemas/countrySchema';
 import { getCountryById, updateCountry } from '@/services/countryService';
 import { Label } from '@/components/ui/Label';
 import { Input } from '@/components/ui/Input';
+import { SwalConfirm, SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 
 const EditCountryPage = () => {
   const router = useRouter();
@@ -63,10 +64,12 @@ const EditCountryPage = () => {
 
     try {
       await updateCountry(id, formData);
-      toast.success('Country updated successfully!');
+      SwalSuccess('Country updated successfully!');
+
       router.push('/admin/country');
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'Update failed');
+      SwalError({ title: "Failed!", message: error?.response?.data?.message ||  'Update failed' });
+
     }
   };
 

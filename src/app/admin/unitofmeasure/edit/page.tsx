@@ -11,6 +11,7 @@ import { ArrowLeft } from 'lucide-react';
 import { getUnitMeasureById, updateUnitMeasure } from '@/services/unitmeasureService';
 import { Label } from '@/components/ui/Label';
 import { Input } from '@/components/ui/Input';
+import { SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 
 const unitMeasureSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -36,9 +37,6 @@ export default function EditUnitMeasurePage() {
     const unitId = params.get('id');
     if (unitId) {
       setId(unitId);
-    } else {
-      toast.error('Unit Measure ID not found.');
-      router.push('/admin/unitofmeasure');
     }
   }, [router]);
 
@@ -51,11 +49,8 @@ export default function EditUnitMeasurePage() {
         if (data) {
           setValue('title', data.title || '');
         } else {
-          toast.error('Unit Measure not found.');
         }
       } catch (error) {
-        console.error('Fetch failed:', error);
-        toast.error('Failed to fetch Unit Measure.');
       }
     };
     fetchData();
@@ -67,13 +62,16 @@ export default function EditUnitMeasurePage() {
       formData.append('title', data.title);
       const res = await updateUnitMeasure(id as string, formData);
       if (res?.status === true) {
-        toast.success('Unit Measure updated successfully!', { position: 'top-center' });
+        SwalSuccess('Unit Measure updated successfully!');
         router.push('/admin/unitofmeasure');
       } else {
-        toast.error(res?.message || 'Failed to update Unit Measure.');
+        SwalError({ title: "Failed!", message: res?.message || 'Failed to update Unit Measure.' });
+
       }
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || 'An error occurred.');
+      SwalError({ title: "Failed!", message: error?.response?.data?.message || 'Failed to update Unit Measure.' });
+
+
     }
   };
 
@@ -88,7 +86,7 @@ export default function EditUnitMeasurePage() {
             >
               <ArrowLeft className="h-5 w-5 mr-1" />
             </button>
-            <h1  className="text-xl font-medium text-gray-800">Edit Unit Of Measure</h1>
+            <h1 className="text-xl font-medium text-gray-800">Edit Unit Of Measure</h1>
           </div>
         </div>
       </header>

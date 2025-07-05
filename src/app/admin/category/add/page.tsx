@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { Label } from "@/components/ui/Label";
 import { Input } from "@/components/ui/Input";
 import { createCategory } from "@/services/categoryService";
+import { SwalConfirm, SwalSuccess, SwalError } from "@/components/ui/SwalAlert";
 
 // Zod schema
 const categorySchema = z.object({
@@ -54,20 +55,18 @@ export default function AddCategoryForm() {
       const response = await createCategory(formDataToSend);
 
       if (response?.status === true) {
-        toast.success("Category has been saved.", {
-          position: "top-center",
-        });
+
+        SwalSuccess('Category has been saved.');
         router.push("/admin/category");
       } else {
-        toast.error(response?.message || "Failed to create category.", {
-          position: "top-center",
-        });
+        SwalError({ title: "Failed!", message: response?.message || "Failed to create category." });
+
+
       }
     } catch (error: any) {
       const message = error?.response?.data?.message;
-      toast.error(message || "An error occurred.", {
-        position: "top-center",
-      });
+      SwalError({ title: "Failed!", message: message || "An error occurred." });
+
     }
   };
 
@@ -82,7 +81,7 @@ export default function AddCategoryForm() {
             >
               <ArrowLeft className="h-5 w-5 mr-1" />
             </button>
-            <h1  className="text-xl font-medium text-gray-800">Add Category</h1>
+            <h1 className="text-xl font-medium text-gray-800">Add Category</h1>
           </div>
         </div>
       </header>
@@ -144,33 +143,33 @@ export default function AddCategoryForm() {
             </div>
 
             {/* Image Upload */}
-                 <div>
-            <Label htmlFor="profile-upload">Image</Label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
-              <input
-                id="profile-upload"
-                type="file"
-                className="hidden"
-                accept=".jpg,.jpeg,.png"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const validTypes = ['image/jpeg', 'image/png'];
-                    if (validTypes.includes(file.type)) {
-                      setImage(file);
-                    } else {
-                      toast.error("Only JPG and PNG images are allowed.");
+            <div>
+              <Label htmlFor="profile-upload">Image</Label>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+                <input
+                  id="profile-upload"
+                  type="file"
+                  className="hidden"
+                  accept=".jpg,.jpeg,.png"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const validTypes = ['image/jpeg', 'image/png'];
+                      if (validTypes.includes(file.type)) {
+                        setImage(file);
+                      } else {
+                        toast.error("Only JPG and PNG images are allowed.");
+                      }
                     }
-                  }
-                }}
-              />
-              <label htmlFor="profile-upload" className="cursor-pointer flex flex-col items-center">
-                <Upload className="h-12 w-12 text-gray-400" />
-                <span className="mt-2 text-base text-gray-600">Click to upload profile image</span>
-              </label>
-              {Image && <div className="mt-2 text-base text-green-600">Selected: {Image.name}</div>}
+                  }}
+                />
+                <label htmlFor="profile-upload" className="cursor-pointer flex flex-col items-center">
+                  <Upload className="h-12 w-12 text-gray-400" />
+                  <span className="mt-2 text-base text-gray-600">Click to upload profile image</span>
+                </label>
+                {Image && <div className="mt-2 text-base text-green-600">Selected: {Image.name}</div>}
+              </div>
             </div>
-          </div>
           </div>
 
           {/* Action Buttons */}
