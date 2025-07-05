@@ -7,7 +7,6 @@ import Header from '@/components/AdminLayout/Header';
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [isClient, setIsClient] = useState(false);
-
   const handleToggle = () => {
     setCollapsed(prev => !prev);
   };
