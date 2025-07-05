@@ -40,7 +40,7 @@ const PaymentsListPage = () => {
   try {
     const res = await getAllPayments(page, limit, search);
     setFilteredData(res.data || []);
-    setTotalRows(res.total || 0);       // ✅ fixed
+    setTotalRows(res.totalItems || 0);      
     setTotalPages(res.totalPages || 0);
   } catch (error) {
     console.error("Failed to fetch payments:", error);

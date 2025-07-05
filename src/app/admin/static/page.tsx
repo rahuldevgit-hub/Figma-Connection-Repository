@@ -31,13 +31,10 @@ const StaticServiceListPage = () => {
   const fetchData = useCallback(async (page = 1, limit = 10, search = "") => {
     setLoading(true);
     try {
-      const res = await getAllstatic(page, limit, search);
-      console.log(res,'df');
-      
+      const res = await getAllstatic(page, limit, search);      
       const data = Array.isArray(res?.data) ? res.data : [];
-
       setFilteredData(data);
-      setTotalRows(res.total || 0);
+      setTotalRows(res.totalItems || 0);
       setTotalPages(res.totalPages || 0);
     } catch (error) {
       console.error("Failed to fetch static data:", error);

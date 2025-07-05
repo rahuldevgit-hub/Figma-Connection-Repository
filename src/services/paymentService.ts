@@ -5,7 +5,7 @@ export const getAllPayments = async (
   page: number = 1,
   limit: number = 10,
   search: string = ''
-): Promise<{ data: Payment[]; total: number; currentPage: number; totalPages: number }> => {
+): Promise<{ data: Payment[]; totalItems: number; currentPage: number; totalPages: number }> => {
   const response = await API.get('/admin/payment/viewAll', {
     params: { page, limit, search },
   });

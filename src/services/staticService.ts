@@ -5,7 +5,7 @@ export const getAllstatic = async (
   page: number = 1,
   limit: number = 10,
   search: string = ''
-): Promise<{ data: Static[]; total: number; currentPage: number; totalPages: number }> => {
+): Promise<{ data: Static[]; totalItems: number; currentPage: number; totalPages: number }> => {
   const response = await API.get('/admin/static/viewAll', {
     params: { page, limit, search },
   });
@@ -14,7 +14,7 @@ export const getAllstatic = async (
 
 export const getstaticById = async (id: number): Promise<Static> => {
   const response = await API.get(`/admin/static/details/${id}`);
-  return response.data.result; // ✅ directly returns the object
+  return response.data.result; //  directly returns the object
 };
 
 export const createstatic = async (data: FormData): Promise<any> => {
