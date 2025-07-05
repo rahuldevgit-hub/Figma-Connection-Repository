@@ -115,7 +115,7 @@ const IncotermListPage = () => {
         width: "10%",
       },
       {
-        name: "Incoterm Name",
+        name: "Name",
         selector: (row: any) => row.name,
         sortable: true,
         width: "40%",
@@ -205,7 +205,7 @@ const IncotermListPage = () => {
                   id="reference"
                   type="text"
                   className="w-full h-10 text-black text-sm border-gray-200 rounded-[5px]"
-                  placeholder="Search"
+                  placeholder="Name"
                   value={searchFilters.name}
                   onChange={(e) =>
                     setSearchFilters({ ...searchFilters, name: e.target.value })
@@ -213,17 +213,17 @@ const IncotermListPage = () => {
                 />
               </div>
 
-              <div className="flex gap-2 mt-6 md:mt-0">
+                <div className="flex gap-2">
                 <Button
                   onClick={handleSearch}
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                  className="w-full bg-blue-500 hover:bg-blue-700 rounded-[5px]"
                 >
                   Search
                 </Button>
                 <Button
                   onClick={handleReset}
                   variant="outline"
-                  className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                  className="w-full bg-yellow-600 hover:bg-yellow-700 text-white rounded-[5px]"
                 >
                   Reset
                 </Button>

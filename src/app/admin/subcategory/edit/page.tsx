@@ -109,7 +109,7 @@ export default function EditSubCategoryForm() {
   };
 
   const handleBack = () => {
-    router.push("/admin/category");
+    router.push("/admin/subcategory");
   };
   return (
        <div className="min-h-screen bg-gray-50">

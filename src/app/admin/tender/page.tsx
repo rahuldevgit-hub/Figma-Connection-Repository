@@ -19,6 +19,10 @@ import {
   getAllTenders, updateStatusTender, deleteTender,
   createCalendarEvent, resendEmailToEvaluator, InvitationResendEmail
 } from '@/services/tendersService';
+import {
+  getAllSubCategory,
+
+} from "@/services/subcategoryService";
 import { formatDate } from '@/lib/date';
 import {Label} from '@/components/ui/Label';
 import {Input} from '@/components/ui/Input';
@@ -40,6 +44,11 @@ export default function EmailTemplateList() {
   const [searchCategory, setSearchCategory] = useState('');
   const [fromDate, setFromDate] = useState<Date>();
   const [toDate, setToDate] = useState<Date>();
+const [selectedParentName, setSelectedParentName] = useState(""); // You can now drop this if using ID
+const [allParentNames, setAllParentNames] = useState<{ id: number; name: string }[]>([]);
+const [allSubCategoryNames, setAllSubCategoryNames] = useState<{ id: number; name: string }[]>([]);
+const [allData, setAllData] = useState<any[]>([]);
+
   const [searchFilters, setSearchFilters] = useState({
     reference: '',
     category: '',
@@ -47,6 +56,32 @@ export default function EmailTemplateList() {
     fromDate: '',
     toDate: '',
   });
+
+const fetchData = async () => {
+  try {
+    setLoading(true);
+
+    const res = await getAllSubCategory(1, 10000);
+    const data = Array.isArray(res?.result?.data) ? res.result.data : [];
+    setAllData(data);
+
+    const parentNameMap = new Map<number, string>();
+
+    data.forEach((item) => {
+      if (item.parentCategory?.id && item.parentCategory?.name) {
+        parentNameMap.set(item.parentCategory.id, item.parentCategory.name);
+      }
+    });
+
+    const parentNamesArray = Array.from(parentNameMap.entries()).map(([id, name]) => ({ id, name }));
+
+    setAllParentNames(parentNamesArray);
+  } catch (error) {
+    console.error("Failed to fetch subcategories:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const fetchTemplates = async (page, limit) => {
     setLoading(true);
@@ -62,7 +97,22 @@ export default function EmailTemplateList() {
 
   useEffect(() => {
     fetchTemplates(page, limit);
+    fetchData()
   }, [page, limit]);
+useEffect(() => {
+  const selectedCategory = allParentNames.find(p => p.id.toString() === searchFilters.category);
+  if (selectedCategory) {
+    const filteredSubCats = allData
+      .filter((item) => item.parentCategory?.id === selectedCategory.id)
+      .map((item) => ({ id: item.id, name: item.name }));
+
+    setAllSubCategoryNames([...new Map(filteredSubCats.map(item => [item.id, item])).values()]);
+  } else {
+    const allNames = allData.map((item) => ({ id: item.id, name: item.name }));
+    setAllSubCategoryNames([...new Map(allNames.map(item => [item.id, item])).values()]);
+  }
+}, [searchFilters.category, allData]);
+
 
   const handlePerRowsChange = (newLimit, page) => {
     setLimit(newLimit);
@@ -323,34 +373,42 @@ export default function EmailTemplateList() {
 
   {/* Category */}
   <div>
-    <select
-      id="category"
-      className="w-full h-10 text-black text-sm border border-gray-200 rounded-[5px] px-3"
-      value={searchFilters.category}
-      onChange={(e) =>
-        setSearchFilters({ ...searchFilters, category: e.target.value })
-      }
-    >
-      <option value="">Select Category</option>
-      <option value="Category 1">Category 1</option>
-      <option value="Category 2">Category 2</option>
-    </select>
-  </div>
+   <select
+  id="category"
+  className="w-full h-10 text-black text-sm border border-gray-200 rounded-[5px] px-3"
+  value={searchFilters.category}
+  onChange={(e) => {
+    const value = e.target.value;
+    setSearchFilters({ ...searchFilters, category: value });
+  }}
+>
+  <option value="">Select Category</option>
+  {allParentNames.map((cat) => (
+    <option key={cat.id} value={cat.id}>
+      {cat.name}
+    </option>
+  ))}
+</select>
 
-  {/* SubCategory */}
+
+  </div>
   <div>
-    <select
-      id="subcategory"
-      className="w-full h-10 text-black  text-sm border border-gray-200 rounded-[5px] px-3"
-      value={searchFilters.subcategory}
-      onChange={(e) =>
-        setSearchFilters({ ...searchFilters, subcategory: e.target.value })
-      }
-    >
-      <option value="">Select SubCategory</option>
-      <option value="SubCategory 1">SubCategory 1</option>
-      <option value="SubCategory 2">SubCategory 2</option>
-    </select>
+   <select
+  id="subcategory"
+  className="w-full h-10 text-black text-sm border border-gray-200 rounded-[5px] px-3"
+  value={searchFilters.subcategory}
+  onChange={(e) =>
+    setSearchFilters({ ...searchFilters, subcategory: e.target.value })
+  }
+>
+  <option value="">Select SubCategory</option>
+  {allSubCategoryNames.map((sub) => (
+    <option key={sub.id} value={sub.id}>
+      {sub.name}
+    </option>
+  ))}
+</select>
+
   </div>
 
   {/* From Date */}

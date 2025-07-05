@@ -95,7 +95,7 @@ const PaymentsListPage = () => {
     const readableStatus = newStatus === "Y" ? "active" : "inactive";
 
     const result = await Swal.fire({
-      title: "Are you sure?",
+      title: "Are you sure",
       text: `You want to change status to ${readableStatus}?`,
       icon: "warning",
       showCancelButton: true,
@@ -143,7 +143,7 @@ const PaymentsListPage = () => {
             <span
               className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${statusClass}`}
             >
-              {row.status === "Y" ? "Active" : "Inactive"}
+              {row.status === "Y" ? "Active" : "InActive"}
             </span>
           );
         },

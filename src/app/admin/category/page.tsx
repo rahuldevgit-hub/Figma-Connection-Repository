@@ -168,10 +168,10 @@ const CategoryListPage = () => {
   };
 
   const handleFeaturedChange = async (id: number, currentStatus: "0" | "1") => {
-    const newFeatured: "0" | "1" = currentStatus === "1" ? "0" : "1";
+    const newFeatured: "0" | "1" = currentStatus == "1" ? "0" : "1";
     const result = await Swal.fire({
       title: `Are you sure`,
-      text: `You want to mark this category as ${newFeatured === "1" ? "featured" : "unfeatured"}?`,
+      text: `You want to mark this category as ${newFeatured == "1" ? "featured" : "unfeatured"}?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes, change it!",
@@ -244,7 +244,7 @@ const CategoryListPage = () => {
               title="Change the Featured"
               onClick={() => handleFeaturedChange(row.id, row.featured)}
             >
-              {row.featured === "1" ? (
+              {row.featured == "1" ? (
                 <Star fill="yellow" stroke="yellow" size={20} />
               ) : (
                 <Star size={20} />

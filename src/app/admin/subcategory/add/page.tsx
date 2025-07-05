@@ -70,7 +70,7 @@ export default function AddSubcategoryForm() {
     }
   };
   const handleBack = () => {
-    router.push("/admin/category");
+    router.push("/admin/subcategory");
   };
   return (
     <div className="min-h-screen bg-gray-50">

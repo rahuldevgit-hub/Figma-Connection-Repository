@@ -213,7 +213,7 @@ const SubCategoryListPage = () => {
             title={`Mark as ${row.status === "Y" ? "Inactive" : "Active"}`}
             onClick={() => handleStatusChange(row.id, row.status)}
           >
-            {row.status === "Y" ? <ToggleRight size={20} className="text-green-500"/> : <ToggleLeft size={20} className="text-green-500"/>}
+            {row.status === "Y" ? <ToggleRight size={20} className="text-green-500"/> : <ToggleLeft size={20} className="text-red-500"/>}
           </button>
           <button
             title="Edit"
@@ -253,8 +253,6 @@ const SubCategoryListPage = () => {
 
             <div className="bg-white rounded-lg shadow-sm border py-4 px-4">
               <div className="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
-
-                {/* Category Filter */}
                 <div>
                   <select
                     id="category"
@@ -270,8 +268,6 @@ const SubCategoryListPage = () => {
                     ))}
                   </select>
                 </div>
-
-                {/* SubCategory Filter */}
                 <div>
                   <select
                     id="subcategory"
@@ -289,21 +285,21 @@ const SubCategoryListPage = () => {
                 </div>
 
                 {/* Buttons */}
-                <div className="flex gap-2 col-span-2">
-                  <Button
-                    onClick={handleSearch}
-                    className="w-full bg-blue-500 hover:bg-blue-700 rounded-[5px]"
-                  >
-                    Search
-                  </Button>
-                  <Button
-                    onClick={handleReset}
-                    variant="outline"
-                    className="w-full bg-yellow-600 hover:bg-yellow-700 text-white rounded-[5px]"
-                  >
-                    Reset
-                  </Button>
-                </div>
+               <div className="flex gap-2">
+                <Button
+                  onClick={handleSearch}
+                  className="w-full bg-blue-500 hover:bg-blue-700 rounded-[5px]"
+                >
+                  Search
+                </Button>
+                <Button
+                  onClick={handleReset}
+                  variant="outline"
+                  className="w-full bg-yellow-600 hover:bg-yellow-700 text-white rounded-[5px]"
+                >
+                  Reset
+                </Button>
+              </div>
               </div>
             </div>
 
