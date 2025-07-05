@@ -41,6 +41,17 @@ jobs:
             set -euo pipefail
             trap 'echo "❌ Deployment failed for branch: ${BRANCH:-unknown}"' ERR
 
+            echo "🧼 Cleaning up .gitconfig lock file if it exists..."
+            sudo rm -f /root/.gitconfig.lock || true
+
+            echo "📊 Checking disk space..."
+            df -h
+
+            echo "🧹 Cleaning up temporary files and Docker junk..."
+            sudo rm -rf /tmp/*
+            sudo journalctl --vacuum-time=7d
+            docker system prune -af --volumes || true
+
             BRANCH="${GITHUB_REF#refs/heads/}"
 
             if [ "$BRANCH" = "dev" ]; then

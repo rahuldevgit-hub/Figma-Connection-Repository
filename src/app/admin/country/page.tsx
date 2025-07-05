@@ -185,7 +185,7 @@ const CountryPage = () => {
         <div className="border shadow-xl p-2">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-medium text-gray-800">
-              Country Lists </h2>
+              Country List</h2>
             <button
               title="Add faq"
               onClick={() => router.push("/admin/country/add")}
