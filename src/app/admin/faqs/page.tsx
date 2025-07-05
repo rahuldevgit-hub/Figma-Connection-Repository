@@ -67,7 +67,7 @@ const FaqPage = () => {
 
   const handleStatusChange = async (id, currentStatus) => {
     const newStatus = currentStatus === "N" ? "Y" : "N";
-    const readableStatus = newStatus === "N" ? "InActive" : "Active";
+    const readableStatus = newStatus === "N" ? "inactive" : "active";
 
     const result = await Swal.fire({
       title: "Are you sure",
@@ -155,9 +155,7 @@ const FaqPage = () => {
             <div
               className="cursor-pointer"
               onClick={() => handleStatusChange(row.id, row.status)}
-              title={`Click to mark as ${
-                row.status === "Y" ? "InActive" : "Active"
-              }`}
+              title={`Click to mark as ${row.status === 'active' ? 'inactive' : 'active'}`}
             >
               {row.status === "Y" ? (
                 <ToggleRight size={20} className="text-green-500" />

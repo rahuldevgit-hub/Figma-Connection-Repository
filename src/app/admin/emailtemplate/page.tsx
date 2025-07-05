@@ -52,8 +52,8 @@ export default function EmailTemplateList() {
 
   const handleDelete = async (id: number) => {
     const result = await Swal.fire({
-      title: 'Are you sure?',
-      text: 'You won’t be able to delete this template!',
+      title: 'Are you sure',
+      text: 'You won’t be able to delete this template?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#506ae5',
@@ -146,7 +146,8 @@ export default function EmailTemplateList() {
       width: '10%',
       cell: (row: any) => (
         <div className="flex space-x-2 items-center">
-          <button onClick={() => handleStatusChange(row.id, row.status)}>
+          <button onClick={() => handleStatusChange(row.id, row.status)}
+            title={`Click to mark as ${row.status === 'active' ? 'inactive' : 'active'}`}>
             {row.status === 'Y' ? (
               <ToggleRight className="text-green-500" size={20} />
             ) : (
@@ -155,12 +156,14 @@ export default function EmailTemplateList() {
           </button>
 
           <button
+          title='Edit'
             onClick={() => router.push(`/admin/emailtemplate/edit/${row.id}`)}
             className="text-green-600 hover:text-green-900"
           >
             <Edit size={16} />
           </button>
           <button
+          title='Delete'
             onClick={() => handleDelete(row.id)}
             className="text-red-600 hover:text-red-900"
           >

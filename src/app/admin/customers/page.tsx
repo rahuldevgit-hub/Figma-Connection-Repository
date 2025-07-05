@@ -44,7 +44,7 @@ const CustomersPage = () => {
   // Function to delete a customer by ID with confirmation
   const handleDelete = async (id) => {
     const result = await Swal.fire({
-      title: 'Are you sure?',
+      title: 'Are you sure',
       text: 'You won’t be able to delete this customer ?  ',
       icon: 'warning',
       showCancelButton: true,
@@ -72,7 +72,7 @@ const CustomersPage = () => {
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
 
     const result = await Swal.fire({
-      title: 'Are you sure?',
+      title: 'Are you sure',
       text: `You want to change status to ${newStatus}?`,
       icon: 'warning',
       showCancelButton: true,

@@ -43,8 +43,8 @@ const UnitMeasurePage = () => {
   const handleDelete = useCallback(
     async (id) => {
       const result = await Swal.fire({
-        title: "Are you sure?",
-        text: "You won’t be able to delete this unit measure!",
+        title: "Are you sure",
+        text: "You won’t be able to delete this unit measure?",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#506ae5",
@@ -68,10 +68,10 @@ const UnitMeasurePage = () => {
   const handleStatusChange = useCallback(
     async (id, currentStatus) => {
       const newStatus = currentStatus === "N" ? "Y" : "N";
-      const readableStatus = newStatus === "Y" ? "Active" : "InActive";
+      const readableStatus = newStatus === "Y" ? "active" : "inactive";
 
       const result = await Swal.fire({
-        title: "Are you sure?",
+        title: "Are you sure",
         text: `You want to change status to ${readableStatus}?`,
         icon: "warning",
         showCancelButton: true,

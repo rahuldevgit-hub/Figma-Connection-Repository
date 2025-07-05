@@ -40,7 +40,7 @@ export default function AddunitofMreasureForm() {
       const response = await createUnitMeasure(formDataToSend);
 
       if (response?.status === true) {
-        toast.success('Unit Measure created successfully!',{ position: 'top-center' });
+        toast.success('Unit measure created successfully!',{ position: 'top-center' });
         router.push('/admin/unitofmeasure');
       } else {
         toast.error(response?.message || 'Failed to create unitMeasure.');

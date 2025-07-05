@@ -126,8 +126,8 @@ const CategoryListPage = () => {
 
   const handleDelete = async (id: number) => {
     const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to delete this category?",
+      title: "Are you sure",
+      text: "You want to delete this category?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#506ae5",
@@ -149,8 +149,8 @@ const CategoryListPage = () => {
   const handleStatusChange = async (id: number, currentStatus: string) => {
     const newStatus = currentStatus === "Y" ? "N" : "Y";
     const result = await Swal.fire({
-      title: "Are you sure?",
-      text: `Do you want to change status to ${newStatus === "Y" ? "active" : "inactive"}?`,
+      title: "Are you sure",
+      text: `You want to change status to ${newStatus === "Y" ? "active" : "inactive"}?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes, change it!",
@@ -159,7 +159,7 @@ const CategoryListPage = () => {
     if (result.isConfirmed) {
       try {
         await updateStatusCategory(id, { status: newStatus });
-        Swal.fire("Updated!", "Status has been changed.", "success");
+        Swal.fire("Updated!", "Category status has been changed.", "success");
         fetchData();
       } catch {
         Swal.fire("Error", "Failed to update status.", "error");
@@ -170,8 +170,8 @@ const CategoryListPage = () => {
   const handleFeaturedChange = async (id: number, currentStatus: "0" | "1") => {
     const newFeatured: "0" | "1" = currentStatus === "1" ? "0" : "1";
     const result = await Swal.fire({
-      title: `Are you sure?`,
-      text: `Do you want to mark this category as ${newFeatured === "1" ? "featured" : "unfeatured"}?`,
+      title: `Are you sure`,
+      text: `You want to mark this category as ${newFeatured === "1" ? "featured" : "unfeatured"}?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes, change it!",
@@ -180,7 +180,7 @@ const CategoryListPage = () => {
     if (result.isConfirmed) {
       try {
         await updateFeaturedCategory(id, { featured: newFeatured });
-        Swal.fire("Updated!", "Category has been updated.", "success");
+        Swal.fire("Updated!", "Category featured has been updated.", "success");
         fetchData();
       } catch {
         Swal.fire("Error!", "Failed to update featured status.", "error");
@@ -230,6 +230,7 @@ const CategoryListPage = () => {
           <div className="flex space-x-3 items-center">
             <div
               className="cursor-pointer"
+              title={`Click to mark as ${row.status === 'active' ? 'inactive' : 'active'}`}
               onClick={() => handleStatusChange(row.id, row.status)}
             >
               {row.status === "Y" ? (

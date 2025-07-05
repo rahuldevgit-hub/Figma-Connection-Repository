@@ -127,7 +127,7 @@ const SubCategoryListPage = () => {
   const handleDelete = async (id: number) => {
     const result = await Swal.fire({
       title: "Are you sure",
-      text: "Do you want to delete this subcategory?",
+      text: "You want to delete this subcategory?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#506ae5",
@@ -150,7 +150,7 @@ const SubCategoryListPage = () => {
     const readableStatus = newStatus === "Y" ? "active" : "inactive";
     const result = await Swal.fire({
       title: "Are you sure",
-      text: `Do you want to change status to ${readableStatus}?`,
+      text: `You want to change status to ${readableStatus}?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes, change it!",

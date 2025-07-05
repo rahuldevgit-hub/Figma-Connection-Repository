@@ -71,8 +71,8 @@ export default function EmailTemplateList() {
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
-      title: 'Are you sure?',
-      text: 'You wont be able to delete this tender!',
+      title: 'Are you sure',
+      text: 'You wont be able to delete this tender/',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#506ae5',
@@ -98,7 +98,7 @@ export default function EmailTemplateList() {
     const isActivating = currentStatus === 'N';
     const newStatus = isActivating ? 'Y' : 'N';
     const result = await Swal.fire({
-      title: `Are you sure?`,
+      title: `Are you sure`,
       text: `You want to ${isActivating ? 'activate' : 'deactivate'} this tender?`,
       icon: 'warning',
       showCancelButton: true,
@@ -260,7 +260,10 @@ export default function EmailTemplateList() {
     width: '13%',
     cell: (row: any) => (
       <div className="flex space-x-2 items-center justify-center">
-        <button onClick={() => handleStatusChange(row.id, row.status)} title="Toggle Status">
+        <button
+         
+        onClick={() => handleStatusChange(row.id, row.status)} 
+        title={`Click to mark as ${row.status === 'active' ? 'inactive' : 'active'}`}>
           {row.status === 'Y' ? (
             <ToggleRight className="text-green-500" size={20} />
           ) : (
