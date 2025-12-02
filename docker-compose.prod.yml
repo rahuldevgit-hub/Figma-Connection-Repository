@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  eboxtenders-prod-app:
-    container_name: eboxtenders-prod-app
+  doomshell-prod-app:
+    container_name: doomshell-prod-app
     build:
       context: .
       dockerfile: Dockerfile

@@ -3,6 +3,7 @@
 
 import Swal from "sweetalert2";
 
+// ✅ Confirm Alert
 export const SwalConfirm = async (
   {
     title = "Are you sure?",
@@ -31,7 +32,6 @@ export const SwalConfirm = async (
 
   return result.isConfirmed;
 };
-
 // ✅ Success Alert
 export const SwalSuccess = (
   input: string | { title?: string; message?: string }
@@ -46,6 +46,7 @@ export const SwalSuccess = (
     confirmButtonColor: "#3085d6",
   });
 };
+// ✅ Error Alert
 export const SwalError = (
   input: string | { title?: string; message?: string }
 ) => {

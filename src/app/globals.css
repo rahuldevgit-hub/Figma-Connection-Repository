@@ -3,57 +3,64 @@
 @tailwind utilities;
 @import 'summernote/dist/summernote-lite.css';
 
-:root {
+.clip-path-polygon {
+  clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 100%);
 
+}
+
+:root {
   --background: #ffffff;
   --foreground: #ffffff;
-   --primary-red-color: #ef4444;
-      --primary-purle-color: #6366f1;
-    --primary-yellow-color: #f59e0b;
-   --primary-green-color: #10b981;
-   --primary-blue-color: #3b82f6;
-    --primary-orange-color: #f97316;
-     --primary-zinc-color:#18181B;
-    --primary-gray-color : #4B5563;
+  --primary-red-color: #ef4444;
+  --primary-purle-color: #6366f1;
+  --primary-yellow-color: #f59e0b;
+  --primary-green-color: #10b981;
+  --primary-blue-color: #3b82f6;
+  --primary-orange-color: #f97316;
+  --primary-zinc-color: #18181B;
+  --primary-gray-color: #4B5563;
 }
 
-     :root{
-      --hover-red-color: #f16a6a;
-    --hover-purle-color: #7a7cf0;
-     --hover-yellow-color: #eea72c;
-      --hover-blue-color: #5d95f0;
-    --hover-green-color: #3fd6a4;
-     --hover-orange-color: #f78738;
-     }
-
-:root{
-  --text-black:#070707;
-  --text-gray:#363535;
-   --text-white:#ffffff;
-   --text-neutral:#9CA3AF;
-     --text-gray-thin:#D1D5DB;
+:root {
+  --hover-red-color: #f16a6a;
+  --hover-purle-color: #7a7cf0;
+  --hover-yellow-color: #eea72c;
+  --hover-blue-color: #5d95f0;
+  --hover-green-color: #3fd6a4;
+  --hover-orange-color: #f78738;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+:root {
+  --text-black: #070707;
+  --text-gray: #363535;
+  --text-white: #ffffff;
+  --text-neutral: #9CA3AF;
+  --text-gray-thin: #D1D5DB;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
+
 .btn {
   @apply bg-white text-sm border px-3 py-1 rounded shadow-sm hover:bg-gray-100;
 }
+
+::placeholder {
+  color: gray !important;
+  opacity: 1 !important;
+}
+
 
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -77,11 +84,13 @@
   :root {
     --background: #ffffff;
     --foreground: #ededed;
-   
+
   }
 }
 
-.fBevtM div:first-child{    white-space: pre-wrap !important;}
+.fBevtM div:first-child {
+  white-space: pre-wrap !important;
+}
 
 body {
   background: var(--background);
@@ -90,50 +99,61 @@ body {
 }
 
 
-.themecll{ 
+.themecll {
   background-color: var(--primary-red-color);
 }
-.themecll:hover{
-  background-color: var( --hover-red-color);
+
+.themecll:hover {
+  background-color: var(--hover-red-color);
 }
 
 /* header */
-.drop{
+.drop {
   background-color: var(--primary-red-color);
- color: var(--text-white);
+  color: var(--text-white);
 }
-.drop:hover{
-  background-color: var( --hover-red-color);
+
+.drop:hover {
+  background-color: var(--hover-red-color);
   color: var(--text-black);
-  
+
 }
-.dropdown{
+
+.dropdown {
   background-color: var(--background);
   color: var(--text-black);
 }
-.inner:hover{
+
+.inner:hover {
   color: var(--text-white);
   background-color: var(--primary-red-color);
 }
-.dropimg{
+
+.dropimg {
   border-color: var(--text-white);
 }
+
 /* sidebar */
-.click{
+.click {
   background-color: var(--primary-red-color);
   color: var(--text-white);
 }
-.click:hover{
+
+.click:hover {
   background-color: var(--hover-red-color);
   color: var(--text-black);
 }
-.sidehover:hover{
+
+.sidehover:hover {
   color: var(--text-neutral);
   background-color: var(--primary-zinc-color);
 }
+
 /* custmore */
-.dataname{
+.dataname {
   color: var(--primary-gray-color);
   border-color: var(--text-gray-thin);
 }
 
+/* new for the static page */
+/* new for the static page */

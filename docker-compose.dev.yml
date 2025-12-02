@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  eboxtenders-staging-app:
-    container_name: eboxtenders-staging-app
+  doomshell-staging-app:
+    container_name: doomshell-staging-app
     build:
       context: .
       dockerfile: Dockerfile

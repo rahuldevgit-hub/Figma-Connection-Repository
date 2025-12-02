@@ -1,4 +1,4 @@
-// File: C:\Users\Shell-10\Documents\eboxtenders-frontend\src\app\layout.tsx
+// File: D:\@awebbuilders\@bigbash_02-12-2025\bigbash-frontend\src\app\layout.tsx
 import * as entry from '../../../src/app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

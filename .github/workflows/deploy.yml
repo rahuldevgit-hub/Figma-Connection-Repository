@@ -55,11 +55,11 @@ jobs:
             BRANCH="${GITHUB_REF#refs/heads/}"
 
             if [ "$BRANCH" = "dev" ]; then
-              APP_DIR="/var/www/newstaging.eboxtenders.com"
+              APP_DIR="/var/www/newstaging.doomshell.com"
               DOCKER_FILE="docker-compose.dev.yml"
               ENV_FILE=".env.staging"
             elif [ "$BRANCH" = "master" ]; then
-              APP_DIR="/var/www/production.eboxtenders.com"
+              APP_DIR="/var/www/production.doomshell.com"
               DOCKER_FILE="docker-compose.prod.yml"
               ENV_FILE=".env.production"
             else
